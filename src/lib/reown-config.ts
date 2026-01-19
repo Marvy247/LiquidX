@@ -11,13 +11,13 @@ if (!projectId) {
 
 // Create the Wagmi adapter
 const metadata = {
-  name: 'Hermes Bridge',
-  description: 'Cross-chain USDC bridge between Ethereum and Stacks',
-  url: typeof window !== 'undefined' ? window.location.origin : 'https://hermes-bridge.vercel.app',
+  name: 'LiquidX',
+  description: 'Earn $LQX rewards while bridging USDC from Ethereum to Stacks',
+  url: typeof window !== 'undefined' ? window.location.origin : 'https://liquidx.vercel.app',
   icons: [
     typeof window !== 'undefined' 
       ? `${window.location.origin}/logo.png` 
-      : 'https://hermes-bridge.vercel.app/logo.png'
+      : 'https://liquidx.vercel.app/logo.png'
   ]
 }
 

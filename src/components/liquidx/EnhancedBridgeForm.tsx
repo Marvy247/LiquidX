@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
-import { ArrowDown, Loader2, CheckCircle2, Zap, TrendingUp, Gift, Users } from "lucide-react";
+import { ArrowDown, Loader2, CheckCircle2, Zap, TrendingUp, Gift, Users, X, ExternalLink } from "lucide-react";
 import { isValidStacksAddress } from "@/lib/stacks-address";
 import { toast } from "sonner";
 import { formatAPY, formatCurrency, type OpportunityAlert } from "@/services/apy-scanner";
@@ -38,6 +38,7 @@ export function EnhancedBridgeForm({
   const [referralCode, setReferralCode] = useState("");
   const [step, setStep] = useState<BridgeStep>('input');
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [stacksTxId, setStacksTxId] = useState<string | null>(null);
 
   // Auto-fill amount if opportunity is selected
   useEffect(() => {
@@ -95,7 +96,7 @@ export function EnhancedBridgeForm({
         
         // Register bridge position with LiquidX contract
         try {
-          await registerBridgeWithContract(
+          const stacksTx = await registerBridgeWithContract(
             stacksAddress,
             parsedAmount,
             hash,
@@ -103,6 +104,9 @@ export function EnhancedBridgeForm({
             selectedOpportunity?.protocolName || 'Manual Deployment',
             referralCode || undefined
           );
+          if (stacksTx) {
+            setStacksTxId(stacksTx);
+          }
           toast.success("🎉 Bridge successful! $LQX rewards registered on-chain.");
         } catch (contractError) {
           console.error('Failed to register with contract:', contractError);
@@ -120,6 +124,7 @@ export function EnhancedBridgeForm({
     setAmount("");
     setStep('input');
     setTxHash(null);
+    setStacksTxId(null);
   };
 
   // Register bridge with LiquidX contract
@@ -130,7 +135,7 @@ export function EnhancedBridgeForm({
     autoDeploy: boolean,
     protocolName: string,
     referrer?: string
-  ) => {
+  ): Promise<string | null> => {
     try {
       const txData = prepareRegisterBridgeTransaction(
         userAddress,
@@ -180,15 +185,50 @@ export function EnhancedBridgeForm({
 
   if (step === 'complete' && txHash) {
     return (
-      <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30">
+      <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30 relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+          onClick={handleReset}
+        >
+          <X className="w-5 h-5" />
+        </Button>
         <CardContent className="pt-6 text-center py-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-foreground mb-2">Bridge Complete!</h3>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-4">
             {amount} USDC bridged to Stacks
           </p>
+
+          {/* Transaction Links */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <a
+              href={`https://sepolia.etherscan.io/tx/${txHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-black hover:text-black/70 transition-colors underline underline-offset-4"
+            >
+              <span>View on Sepolia</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            {stacksTxId && (
+              <>
+                <span className="text-muted-foreground">•</span>
+                <a
+                  href={`https://explorer.hiro.so/txid/${stacksTxId}?chain=testnet`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-black hover:text-black/70 transition-colors underline underline-offset-4"
+                >
+                  <span>View on Stacks</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </>
+            )}
+          </div>
 
           {/* Rewards Summary */}
           <div className="bg-background rounded-xl p-6 mb-6 space-y-4">

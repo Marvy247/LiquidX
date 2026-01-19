@@ -76,7 +76,6 @@ export function OpportunityScanner({ amount, onSelectOpportunity }: OpportunityS
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <Zap className="w-6 h-6 text-yellow-500" />
             Live Opportunities
           </h2>
           <p className="text-sm text-muted-foreground">

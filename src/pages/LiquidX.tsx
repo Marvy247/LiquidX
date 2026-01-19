@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBridge } from "@/hooks/useBridge";
 import { ConnectWalletButton } from "@/components/bridge/ConnectWalletButton";
 import { OpportunityScanner } from "@/components/liquidx/OpportunityScanner";
@@ -17,6 +17,7 @@ import {
   Sparkles,
   ExternalLink
 } from "lucide-react";
+import { getGlobalStats } from "@/services/contract-service";
 import { formatCurrency } from "@/services/apy-scanner";
 import type { OpportunityAlert } from "@/services/apy-scanner";
 
@@ -44,7 +45,6 @@ const LiquidX = () => {
   useEffect(() => {
     async function fetchGlobalStats() {
       try {
-        const { getGlobalStats } = await import("@/services/contract-service");
         const stats = await getGlobalStats();
         setGlobalStats({
           ...stats,
@@ -70,35 +70,42 @@ const LiquidX = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      {/* Elegant Background Pattern */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-[0.02]">
+        <div className="absolute top-0 left-0 w-full h-full" 
+             style={{ 
+               backgroundImage: `radial-gradient(circle at 2px 2px, black 1px, transparent 0)`,
+               backgroundSize: '40px 40px'
+             }} 
+        />
       </div>
 
       <div className="relative z-10">
         {/* Header */}
-        <header className="border-b border-border backdrop-blur-sm bg-background/80 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4">
+        <header className="border-b border-border/50 backdrop-blur-md bg-background/95 sticky top-0 z-50 shadow-sm">
+          <div className="container mx-auto px-4 py-5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center shadow-lg glow-orange">
-                    <Sparkles className="w-7 h-7 text-white" />
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shadow-lg border border-gray-200">
+                    <Sparkles className="w-6 h-6 text-white" />
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-black rounded-full border-2 border-background" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gradient-bitcoin tracking-tight">
+                  <h1 className="text-2xl font-bold tracking-tight" style={{ 
+                    background: 'linear-gradient(135deg, #000000 0%, #404040 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}>
                     LiquidX
                   </h1>
-                  <p className="text-xs text-muted-foreground">
-                    Earn While Bridging to Stacks
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Premium Bridge • Ethereum → Stacks
                   </p>
                 </div>
-                <Badge className="ml-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-none animate-pulse">
-                  🔥 2x Rewards Active
+                <Badge className="ml-2 bg-black text-white border-none px-3 py-1">
+                  <span className="text-xs font-semibold">LIVE</span>
                 </Badge>
               </div>
               
@@ -108,15 +115,15 @@ const LiquidX = () => {
         </header>
 
         {/* Global Stats Banner */}
-        <div className="bg-gradient-to-r from-primary/10 via-yellow-500/10 to-orange-500/10 border-b border-border">
+        <div className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <DollarSign className="w-5 h-5 text-green-500" />
-                  <span className="text-sm text-muted-foreground">Total Bridged</span>
+                  <DollarSign className="w-5 h-5 text-black" />
+                  <span className="text-sm text-muted-foreground font-medium">Total Bridged</span>
                 </div>
-                <div className="text-3xl font-bold text-gradient-bitcoin">
+                <div className="text-3xl font-bold text-black">
                   {formatCurrency(globalStats.totalLiquidityBridged)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">USDCx on Stacks</p>
@@ -124,21 +131,21 @@ const LiquidX = () => {
 
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
-                  <span className="text-sm text-muted-foreground">Rewards Paid</span>
+                  <Zap className="w-5 h-5 text-black" />
+                  <span className="text-sm text-muted-foreground font-medium">Rewards Paid</span>
                 </div>
-                <div className="text-3xl font-bold text-gradient-bitcoin">
+                <div className="text-3xl font-bold text-black">
                   {globalStats.totalRewardsDistributed.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">$LOS Tokens</p>
+                <p className="text-xs text-muted-foreground mt-1">$LQX Tokens</p>
               </div>
 
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <Users className="w-5 h-5 text-blue-500" />
-                  <span className="text-sm text-muted-foreground">Active Users</span>
+                  <Users className="w-5 h-5 text-black" />
+                  <span className="text-sm text-muted-foreground font-medium">Active Users</span>
                 </div>
-                <div className="text-3xl font-bold text-gradient-bitcoin">
+                <div className="text-3xl font-bold text-black">
                   {globalStats.totalUsers.toLocaleString()}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">Liquidity Providers</p>
@@ -146,10 +153,10 @@ const LiquidX = () => {
 
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <TrendingUp className="w-5 h-5 text-orange-500" />
-                  <span className="text-sm text-muted-foreground">Avg APY</span>
+                  <TrendingUp className="w-5 h-5 text-black" />
+                  <span className="text-sm text-muted-foreground font-medium">Avg APY</span>
                 </div>
-                <div className="text-3xl font-bold text-gradient-bitcoin">
+                <div className="text-3xl font-bold text-black">
                   {globalStats.averageAPY}%
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">With Bonuses</p>
@@ -164,19 +171,19 @@ const LiquidX = () => {
             {/* Hero Section */}
             {!isEthConnected && (
               <div className="text-center mb-12">
-                <h2 className="text-5xl font-bold mb-4">
-                  <span className="text-gradient-bitcoin">Earn While You Bridge</span>
+                <h2 className="text-5xl font-bold mb-4 text-black">
+                  Earn While You Bridge
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light">
                   Bridge USDC from Ethereum to Stacks and earn $LQX rewards. 
                   Auto-deploy to the highest yields. Climb the leaderboard. Get paid.
                 </p>
                 <div className="flex items-center justify-center gap-4 mt-8">
-                  <Badge className="text-base px-4 py-2 bg-green-500/10 text-green-500 border-green-500/30">
-                    ✅ Powered by Circle xReserve
+                  <Badge className="text-sm px-4 py-2 bg-black text-white border-none font-medium">
+                    Powered by Circle xReserve
                   </Badge>
-                  <Badge className="text-base px-4 py-2 bg-primary/10 text-primary border-primary/30">
-                    🎁 Up to 3x Rewards Multiplier
+                  <Badge className="text-sm px-4 py-2 bg-gray-100 text-black border border-gray-200 font-medium">
+                    Up to 3x Rewards Multiplier
                   </Badge>
                 </div>
               </div>

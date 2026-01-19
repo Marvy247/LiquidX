@@ -2,8 +2,7 @@
 // Handles all interactions with the deployed liquidity-rewards contract
 
 import {
-  callReadOnlyFunction,
-  cvToJSON,
+  cvToValue,
   standardPrincipalCV,
   uintCV,
   bufferCV,
@@ -13,11 +12,14 @@ import {
   trueCV,
   falseCV,
   ClarityType,
+  cvToString,
+  deserializeCV,
 } from '@stacks/transactions';
-import { StacksTestnet } from '@stacks/network';
+import { STACKS_TESTNET } from '@stacks/network';
 import { LIQUIDX_CONFIG } from '@/lib/liquidx-config';
 
-const network = new StacksTestnet();
+// Use the testnet network constant
+const network = STACKS_TESTNET;
 const { address: contractAddress, name: contractName } = LIQUIDX_CONFIG.REWARDS_CONTRACT;
 
 // Types
@@ -44,38 +46,53 @@ export interface LeaderboardEntry {
   totalRewards: number;
 }
 
-// Read user's bridge position
+// Read user's bridge position using Stacks API
 export async function getUserPosition(userAddress: string): Promise<UserPosition | null> {
   try {
-    const result = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName: 'get-user-position',
-      functionArgs: [standardPrincipalCV(userAddress)],
-      network,
-      senderAddress: userAddress,
-    });
-
-    const jsonResult = cvToJSON(result);
+    const principalCV = standardPrincipalCV(userAddress);
+    const principalHex = `0x${Buffer.from(cvToString(principalCV)).toString('hex')}`;
     
-    // Check if user has a position
-    if (jsonResult.type === ClarityType.OptionalNone) {
+    const response = await fetch(
+      `${STACKS_TESTNET.client.baseUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/get-user-position`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: userAddress,
+          arguments: [principalHex],
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error('API error:', await response.text());
       return null;
     }
 
-    const position = jsonResult.value.value;
+    const data = await response.json();
     
+    // Check if the result is an optional none
+    if (!data.okay || data.result.startsWith('0x09')) { // 0x09 = none
+      return null;
+    }
+
+    // Deserialize the Clarity value
+    const resultCV = deserializeCV(Buffer.from(data.result.slice(2), 'hex'));
+    const position = cvToValue(resultCV);
+    
+    if (!position || typeof position !== 'object') {
+      return null;
+    }
+
     return {
-      totalBridged: parseInt(position['total-bridged'].value) / 1_000_000, // Convert from microunits
-      rewardMultiplier: parseInt(position['reward-multiplier'].value) / 10000, // Convert from basis points
-      unclaimedRewards: parseInt(position['unclaimed-rewards'].value) / 1_000_000,
-      lastClaim: parseInt(position['last-claim'].value),
-      autoDeployed: position['auto-deployed'].value,
-      targetProtocol: position['target-protocol'].value || '',
-      totalEarned: parseInt(position['total-earned'].value) / 1_000_000,
-      referrer: position.referrer.type === ClarityType.OptionalSome 
-        ? position.referrer.value.value 
-        : null,
+      totalBridged: Number(position['total-bridged'] || 0) / 1_000_000,
+      rewardMultiplier: Number(position['reward-multiplier'] || 10000) / 10000,
+      unclaimedRewards: Number(position['unclaimed-rewards'] || 0) / 1_000_000,
+      lastClaim: Number(position['last-claim'] || 0),
+      autoDeployed: Boolean(position['auto-deployed']),
+      targetProtocol: String(position['target-protocol'] || ''),
+      totalEarned: Number(position['total-earned'] || 0) / 1_000_000,
+      referrer: position.referrer || null,
     };
   } catch (error) {
     console.error('Error fetching user position:', error);
@@ -83,25 +100,33 @@ export async function getUserPosition(userAddress: string): Promise<UserPosition
   }
 }
 
-// Read global statistics
+// Read global statistics using Stacks API
 export async function getGlobalStats(): Promise<GlobalStats> {
   try {
-    const result = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName: 'get-global-stats',
-      functionArgs: [],
-      network,
-      senderAddress: contractAddress,
-    });
+    const response = await fetch(
+      `${STACKS_TESTNET.client.baseUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/get-global-stats`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: contractAddress,
+          arguments: [],
+        }),
+      }
+    );
 
-    const jsonResult = cvToJSON(result);
-    const stats = jsonResult.value;
+    if (!response.ok) {
+      throw new Error('Failed to fetch global stats');
+    }
+
+    const data = await response.json();
+    const resultCV = deserializeCV(Buffer.from(data.result.slice(2), 'hex'));
+    const stats = cvToValue(resultCV);
 
     return {
-      totalLiquidityBridged: parseInt(stats['total-liquidity-bridged'].value) / 1_000_000,
-      totalRewardsDistributed: parseInt(stats['total-rewards-distributed'].value) / 1_000_000,
-      totalUsers: parseInt(stats['total-users'].value),
+      totalLiquidityBridged: Number(stats['total-liquidity-bridged'] || 0) / 1_000_000,
+      totalRewardsDistributed: Number(stats['total-rewards-distributed'] || 0) / 1_000_000,
+      totalUsers: Number(stats['total-users'] || 0),
     };
   } catch (error) {
     console.error('Error fetching global stats:', error);
@@ -113,30 +138,41 @@ export async function getGlobalStats(): Promise<GlobalStats> {
   }
 }
 
-// Read leaderboard entry by rank
+// Read leaderboard entry by rank using Stacks API
 export async function getLeaderboardRank(rank: number): Promise<LeaderboardEntry | null> {
   try {
-    const result = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName: 'get-leaderboard-rank',
-      functionArgs: [uintCV(rank)],
-      network,
-      senderAddress: contractAddress,
-    });
-
-    const jsonResult = cvToJSON(result);
+    const rankCV = uintCV(rank);
+    const rankHex = `0x${Buffer.from(cvToString(rankCV)).toString('hex')}`;
     
-    if (jsonResult.type === ClarityType.OptionalNone) {
+    const response = await fetch(
+      `${STACKS_TESTNET.client.baseUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/get-leaderboard-rank`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: contractAddress,
+          arguments: [rankHex],
+        }),
+      }
+    );
+
+    if (!response.ok) {
       return null;
     }
 
-    const entry = jsonResult.value.value;
+    const data = await response.json();
+    
+    if (!data.okay || data.result.startsWith('0x09')) {
+      return null;
+    }
+
+    const resultCV = deserializeCV(Buffer.from(data.result.slice(2), 'hex'));
+    const entry = cvToValue(resultCV);
 
     return {
-      user: entry.user.value,
-      amountBridged: parseInt(entry['amount-bridged'].value) / 1_000_000,
-      totalRewards: parseInt(entry['total-rewards'].value) / 1_000_000,
+      user: String(entry.user || ''),
+      amountBridged: Number(entry['amount-bridged'] || 0) / 1_000_000,
+      totalRewards: Number(entry['total-rewards'] || 0) / 1_000_000,
     };
   } catch (error) {
     console.error('Error fetching leaderboard rank:', error);
@@ -144,19 +180,31 @@ export async function getLeaderboardRank(rank: number): Promise<LeaderboardEntry
   }
 }
 
-// Get protocol information
+// Get protocol information using Stacks API
 export async function getProtocolInfo(protocolName: string): Promise<any> {
   try {
-    const result = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName: 'get-protocol',
-      functionArgs: [stringAsciiCV(protocolName)],
-      network,
-      senderAddress: contractAddress,
-    });
+    const nameCV = stringAsciiCV(protocolName);
+    const nameHex = `0x${Buffer.from(cvToString(nameCV)).toString('hex')}`;
+    
+    const response = await fetch(
+      `${STACKS_TESTNET.client.baseUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/get-protocol`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: contractAddress,
+          arguments: [nameHex],
+        }),
+      }
+    );
 
-    return cvToJSON(result);
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    const resultCV = deserializeCV(Buffer.from(data.result.slice(2), 'hex'));
+    return cvToValue(resultCV);
   } catch (error) {
     console.error('Error fetching protocol info:', error);
     return null;
