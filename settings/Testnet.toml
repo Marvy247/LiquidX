@@ -1,0 +1,16 @@
+[network]
+name = "testnet"
+deployment_fee_rate = 10
+
+[accounts.deployer]
+mnemonic = "aspect steel maple cover victory hard morning boost heavy palm reduce moral secret health light faint gesture collect weird present omit drift learn convince"
+# Replace with your testnet wallet mnemonic for deployment
+
+[[network.accounts]]
+name = "deployer"
+mnemonic = "aspect steel maple cover victory hard morning boost heavy palm reduce moral secret health light faint gesture collect weird present omit drift learn convince"
+balance = 100_000_000_000
+
+# Contract deployment configuration
+[contracts.liquidity-rewards]
+path = "contracts/liquidity-rewards.clar"

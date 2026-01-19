@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WalletProvider } from "@/components/WalletProvider";
-import Index from "./pages/Index";
+import LiquidX from "./pages/LiquidX";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -13,8 +13,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/" element={<LiquidX />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

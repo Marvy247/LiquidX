@@ -1,0 +1,24 @@
+[network]
+name = "devnet"
+
+[accounts.deployer]
+mnemonic = "twice kind fence tip hidden tilt action fragile skin nothing glory cousin green tomorrow spring wrist shed math olympic multiply hip blue scout claw"
+balance = 100_000_000_000
+
+[accounts.wallet_1]
+mnemonic = "sell invite acquire kitten bamboo drastic jelly vivid peace spawn twice guilt pave pen trash pretty park cube fragile unaware remain midnight betray rebuild"
+balance = 100_000_000_000
+
+[devnet]
+disable_bitcoin_explorer = true
+disable_stacks_explorer = false
+disable_stacks_api = false
+working_dir = "cache"
+orchestrator_port = 20445
+bitcoin_node_p2p_port = 18444
+bitcoin_node_rpc_port = 18443
+stacks_node_p2p_port = 20444
+stacks_node_rpc_port = 20443
+stacks_api_port = 3999
+stacks_api_events_port = 3700
+bitcoin_controller_block_time = 30_000
