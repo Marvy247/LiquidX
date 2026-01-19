@@ -1,4 +1,4 @@
-# 💎 LiquidX - Earn While Bridging to Stacks
+#  LiquidX - Earn While Bridging to Stacks
 
 <p align="center">
   <img src="https://img.shields.io/badge/USDCx-Hackathon-orange?style=for-the-badge" alt="USDCx Hackathon" />
@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Circle-xReserve-00D632?style=for-the-badge" alt="Circle xReserve" />
 </p>
 
-<h3 align="center">🏆 Built for the USDCx on Stacks Builder Challenge</h3>
+<h3 align="center"> Built for the USDCx on Stacks Builder Challenge</h3>
 
 <p align="center">
   <strong>The First Platform That REWARDS You For Bringing Liquidity from Ethereum to Stacks</strong>
@@ -14,7 +14,7 @@
 
 ---
 
-## 🎯 **The Challenge**
+##  **The Challenge**
 
 The USDCx Hackathon asks: **"How do we bring liquidity from Ethereum to Stacks?"**
 
@@ -24,7 +24,7 @@ The USDCx Hackathon asks: **"How do we bring liquidity from Ethereum to Stacks?"
 - ❌ No engagement with Stacks DeFi ecosystem  
 - ❌ Boring user experience
 
-## 💡 **Our Solution: LiquidX**
+##  **Our Solution: LiquidX**
 
 **LiquidX** is an **incentivized bridge aggregator** that transforms bridging into a rewarding experience:
 
@@ -36,7 +36,7 @@ The USDCx Hackathon asks: **"How do we bring liquidity from Ethereum to Stacks?"
 
 ---
 
-## 🔥 **Why LiquidX Wins**
+##  **Why LiquidX Wins**
 
 ### **1. Bridge is the HERO**
 Everything revolves around bringing Ethereum → Stacks liquidity. Every feature incentivizes users to bridge more USDC.
@@ -63,7 +63,7 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 
 ---
 
-## 🏗️ **Architecture**
+##  **Architecture**
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -100,7 +100,7 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 
 ---
 
-## 🚀 **Core Features**
+##  **Core Features**
 
 ### **1. 📊 Real-Time Opportunity Scanner**
 
@@ -114,7 +114,7 @@ Monitors 10+ DeFi protocols across Ethereum and Stacks to find the best yield op
 
 **Example Alert:**
 ```
-🔥 HOTTEST DEAL: ALEX USDCx-STX Pool
+ HOTTEST DEAL: ALEX USDCx-STX Pool
 Stacks APY: 14.8%
 Bridge Bonus: +3.0%
 TOTAL APY: 17.8%
@@ -355,7 +355,7 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 
 ---
 
-## 🚀 **Quick Start**
+##  **Quick Start**
 
 ### **Prerequisites:**
 - Node.js >= 18
@@ -397,7 +397,7 @@ pnpm dev
 
 ---
 
-## 🏆 **Judging Criteria Scorecard**
+##  **Judging Criteria Scorecard**
 
 | Criteria | Weight | Self-Score | Justification |
 |----------|--------|------------|---------------|
@@ -410,44 +410,7 @@ pnpm dev
 
 ---
 
-## 🎬 **2-Minute Demo Video Script**
-
-### **Act 1: The Problem (0:00-0:20)**
-> "I have $10,000 USDC on Ethereum earning 5% on Aave.  
-> Stacks offers 15%! But current bridges are boring.  
-> Bridge your money... and then what?"
-
-### **Act 2: The Solution (0:20-0:40)**
-> "Introducing **LiquidX** - Get PAID to bring liquidity to Stacks.  
-> We find the best yields, bridge your USDC, AND reward you with $LQX tokens."
-
-### **Act 3: Live Demo (0:40-1:30)**
-> "ALEX Pool offers 17.8% total APY with bridge bonus.  
-> I select Auto-Deploy. LiquidX bridges my USDC and enters the pool automatically.  
-> I earn 48.75 $LQX tokens just for bridging!"
-
-### **Act 4: The Impact (1:30-1:50)**
-> "LiquidX has brought $2.5M USDC from Ethereum to Stacks.  
-> Enhancing Stacks DeFi. Making USDCx the go-to stablecoin."
-
-### **Act 5: Call to Action (1:50-2:00)**
-> "**LiquidX** - Earn while bridging. Built on Circle xReserve.  
-> Start earning today."
-
----
-
-## 📝 **Hackathon Submission**
-
-- [x] **GitHub Repository:** All source code included
-- [x] **Working Demo:** Deployed at [liquidx.vercel.app]
-- [x] **Video Pitch:** 2-minute explanation
-- [x] **Deep USDCx Integration:** Circle xReserve + attestation service
-- [x] **Stacks DeFi Enhancement:** Auto-deploy to 4+ protocols
-- [x] **Documentation:** Comprehensive README + code comments
-
----
-
-## 🔮 **Future Roadmap**
+##  **Future Roadmap**
 
 **Phase 1: Post-Hackathon (Month 1-2)**
 - Deploy mainnet contracts
@@ -469,15 +432,6 @@ pnpm dev
 
 ---
 
-## 📞 **Contact & Support**
-
-- **Website:** https://liquidx.app
-- **Twitter:** @LiquidX_io
-- **Discord:** [LiquidX Community]
-- **Email:** team@liquidx.app
-
----
-
 ## 📄 **License**
 
 MIT License - Open source and free to use.
@@ -485,7 +439,7 @@ MIT License - Open source and free to use.
 ---
 
 <p align="center">
-  <strong>Built with ❤️ for the Stacks & Ethereum communities</strong>
+  <strong>Built for the Stacks & Ethereum communities</strong>
 </p>
 
 <p align="center">
@@ -496,7 +450,7 @@ MIT License - Open source and free to use.
 
 ---
 
-## 🎯 **TL;DR: Why LiquidX Wins**
+##  **TL;DR: Why LiquidX Wins**
 
 1. ✅ **Solves the actual challenge:** Brings liquidity from Ethereum to Stacks
 2. ✅ **Deep xReserve integration:** Uses Circle's attestation service  
@@ -506,5 +460,3 @@ MIT License - Open source and free to use.
 6. ✅ **10x better:** Not just a bridge, it's a complete ecosystem
 
 **LiquidX isn't just another bridge. It's the incentive layer that makes Stacks the destination for cross-chain liquidity.**
-
-**🏆 Built to Win! 🏆**
