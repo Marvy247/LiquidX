@@ -3,11 +3,7 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { sepolia } from '@reown/appkit/networks'
 
 // Get projectId from env
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID
-
-if (!projectId) {
-  throw new Error('VITE_WALLETCONNECT_PROJECT_ID is not set in environment variables')
-}
+const projectId = 'cb44e6bd7a2139350e8c0fb2d0fea8cb';
 
 // Create the Wagmi adapter
 const metadata = {
