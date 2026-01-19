@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { getUserPosition, type UserPosition } from "@/services/contract-service";
 import { 
   Gift, 
   TrendingUp, 
@@ -40,20 +41,58 @@ interface RewardsDashboardProps {
 export function RewardsDashboard({ userAddress, onClaimRewards }: RewardsDashboardProps) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [referralCopied, setReferralCopied] = useState(false);
+  const [contractData, setContractData] = useState<UserPosition | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data - replace with actual contract calls
-  const rewards: UserRewards = {
-    totalBridged: 12500,
-    rewardMultiplier: 1.5,
-    unclaimedRewards: 450.75,
-    totalEarned: 987.50,
-    lastClaim: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
-    autoDeployed: true,
-    targetProtocol: "ALEX USDCx-STX Pool",
-    leaderboardRank: 47,
-    referralCode: `LOS-${userAddress.slice(-6).toUpperCase()}`,
-    referralCount: 3,
-    referralEarnings: 87.25,
+  // Fetch user position from contract
+  useEffect(() => {
+    async function fetchUserData() {
+      if (!userAddress) return;
+      
+      setIsLoading(true);
+      try {
+        const position = await getUserPosition(userAddress);
+        setContractData(position);
+      } catch (error) {
+        console.error('Failed to fetch user position:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchUserData();
+    
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchUserData, 30000);
+    return () => clearInterval(interval);
+  }, [userAddress]);
+
+  // Use contract data if available, fallback to mock data
+  const rewards: UserRewards = contractData ? {
+    totalBridged: contractData.totalBridged,
+    rewardMultiplier: contractData.rewardMultiplier,
+    unclaimedRewards: contractData.unclaimedRewards,
+    totalEarned: contractData.totalEarned,
+    lastClaim: new Date(contractData.lastClaim * 1000), // Convert from block height
+    autoDeployed: contractData.autoDeployed,
+    targetProtocol: contractData.targetProtocol || "ALEX USDCx-STX Pool",
+    leaderboardRank: 47, // TODO: Calculate from contract
+    referralCode: `LQX-${userAddress.slice(-6).toUpperCase()}`,
+    referralCount: 3, // TODO: Get from contract
+    referralEarnings: 87.25, // TODO: Get from contract
+  } : {
+    // Fallback mock data for users with no bridge history yet
+    totalBridged: 0,
+    rewardMultiplier: 1.0,
+    unclaimedRewards: 0,
+    totalEarned: 0,
+    lastClaim: new Date(),
+    autoDeployed: false,
+    targetProtocol: "",
+    leaderboardRank: 0,
+    referralCode: `LQX-${userAddress.slice(-6).toUpperCase()}`,
+    referralCount: 0,
+    referralEarnings: 0,
   };
 
   const handleClaim = async () => {

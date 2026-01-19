@@ -9,6 +9,8 @@ import { ArrowDown, Loader2, CheckCircle2, Zap, TrendingUp, Gift, Users } from "
 import { isValidStacksAddress } from "@/lib/stacks-address";
 import { toast } from "sonner";
 import { formatAPY, formatCurrency, type OpportunityAlert } from "@/services/apy-scanner";
+import { prepareRegisterBridgeTransaction, waitForTransactionConfirmation, getTxExplorerUrl } from "@/services/contract-service";
+import { request } from '@stacks/connect';
 
 interface EnhancedBridgeFormProps {
   isConnected: boolean;
@@ -91,10 +93,21 @@ export function EnhancedBridgeForm({
         setTxHash(hash);
         setStep('complete');
         
-        // TODO: Call smart contract to register bridge position
-        // registerBridgePosition(stacksAddress, parsedAmount, hash, deploymentOption === 'auto-deploy', selectedOpportunity?.protocolName || '');
-        
-        toast.success("🎉 Bridge successful! Rewards registered.");
+        // Register bridge position with LiquidX contract
+        try {
+          await registerBridgeWithContract(
+            stacksAddress,
+            parsedAmount,
+            hash,
+            deploymentOption === 'auto-deploy',
+            selectedOpportunity?.protocolName || 'Manual Deployment',
+            referralCode || undefined
+          );
+          toast.success("🎉 Bridge successful! $LQX rewards registered on-chain.");
+        } catch (contractError) {
+          console.error('Failed to register with contract:', contractError);
+          toast.warning("Bridge successful, but rewards registration pending. Please try again later.");
+        }
       }
     } catch (err) {
       const error = err as Error;
@@ -107,6 +120,50 @@ export function EnhancedBridgeForm({
     setAmount("");
     setStep('input');
     setTxHash(null);
+  };
+
+  // Register bridge with LiquidX contract
+  const registerBridgeWithContract = async (
+    userAddress: string,
+    amount: number,
+    ethTxHash: string,
+    autoDeploy: boolean,
+    protocolName: string,
+    referrer?: string
+  ) => {
+    try {
+      const txData = prepareRegisterBridgeTransaction(
+        userAddress,
+        amount,
+        ethTxHash,
+        autoDeploy,
+        protocolName,
+        referrer
+      );
+
+      // Call contract via Stacks Connect
+      const response = await request('stx_callContract', {
+        contract: `${txData.contractAddress}.${txData.contractName}`,
+        functionName: txData.functionName,
+        functionArgs: txData.functionArgs,
+        network: 'testnet',
+      });
+
+      console.log('Contract registration TX:', response.txid);
+      toast.info('Registering rewards on-chain...', { duration: 3000 });
+
+      // Wait for confirmation (optional - can be done in background)
+      const confirmed = await waitForTransactionConfirmation(response.txid, 15, 3000);
+      
+      if (confirmed) {
+        console.log('Rewards registered successfully!');
+      }
+
+      return response.txid;
+    } catch (error) {
+      console.error('Contract registration failed:', error);
+      throw error;
+    }
   };
 
   if (!isConnected) {

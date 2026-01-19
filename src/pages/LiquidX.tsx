@@ -33,13 +33,34 @@ const LiquidX = () => {
   const [selectedOpportunity, setSelectedOpportunity] = useState<OpportunityAlert | undefined>();
   const [bridgeAmount, setBridgeAmount] = useState<number>(5000);
 
-  // Mock global stats - replace with actual contract calls
-  const globalStats = {
-    totalLiquidityBridged: 2547892,
-    totalRewardsDistributed: 76436,
-    totalUsers: 1203,
+  const [globalStats, setGlobalStats] = useState({
+    totalLiquidityBridged: 0,
+    totalRewardsDistributed: 0,
+    totalUsers: 0,
     averageAPY: 16.2,
-  };
+  });
+
+  // Fetch global stats from contract
+  useEffect(() => {
+    async function fetchGlobalStats() {
+      try {
+        const { getGlobalStats } = await import("@/services/contract-service");
+        const stats = await getGlobalStats();
+        setGlobalStats({
+          ...stats,
+          averageAPY: 16.2, // Calculate from protocols
+        });
+      } catch (error) {
+        console.error('Failed to fetch global stats:', error);
+      }
+    }
+
+    fetchGlobalStats();
+    
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchGlobalStats, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleClaimRewards = async () => {
     // TODO: Implement actual claim rewards contract call

@@ -115,3 +115,13 @@ playwright/.cache/
 # Miscellaneous
 *.swp
 *.swo
+
+# Clarinet & Stacks - SECURITY: Never commit private keys or mnemonics!
+settings/Testnet.toml
+settings/Mainnet.toml
+settings/*.toml
+.clarinet
+deployments/*.yaml
+deployment.log
+*.private
+*.secret
