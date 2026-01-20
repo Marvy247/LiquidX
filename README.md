@@ -102,7 +102,7 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 
 ##  **Core Features**
 
-### **1. 📊 Real-Time Opportunity Scanner**
+### **1.  Real-Time Opportunity Scanner**
 
 Monitors 10+ DeFi protocols across Ethereum and Stacks to find the best yield opportunities.
 
@@ -120,7 +120,7 @@ Bridge Bonus: +3.0%
 TOTAL APY: 17.8%
 vs. Ethereum: 5.2% (Aave)
 
-💰 Bridge $5,000 → Earn $890/year
+ Bridge $5,000 → Earn $890/year
 ```
 
 ---
@@ -147,7 +147,7 @@ Step 3: Referral Code → LQX-ABC123 (Optional)
 
 ---
 
-### **3. 🎁 $LQX Rewards System**
+### **3.  $LQX Rewards System**
 
 Native incentive token with real utility.
 
@@ -174,7 +174,7 @@ Native incentive token with real utility.
 
 ---
 
-### **4. 🏆 Gamified Leaderboard**
+### **4.  Gamified Leaderboard**
 
 Compete with other liquidity providers for top ranks and exclusive perks.
 
@@ -192,7 +192,7 @@ Compete with other liquidity providers for top ranks and exclusive perks.
 
 ---
 
-### **5. 📈 Rewards Dashboard**
+### **5.  Rewards Dashboard**
 
 Track your earnings, vesting progress, and referrals.
 
@@ -332,7 +332,7 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 
 ---
 
-## 💰 **Business Model**
+##  **Business Model**
 
 ### **Revenue Streams:**
 
