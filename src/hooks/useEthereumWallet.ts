@@ -11,7 +11,7 @@ import {
 } from 'viem';
 import { sepolia } from 'viem/chains';
 import { BRIDGE_CONFIG, ERC20_ABI, X_RESERVE_ABI } from '@/lib/bridge-config';
-import { encodeStacksAddress } from '@/lib/stacks-address';
+import { encodeSUIAddress } from '@/lib/sui-address';
 
 declare global {
   interface Window {
@@ -215,9 +215,9 @@ export function useEthereumWallet() {
     return hash;
   }, [walletAddress]);
 
-  const depositToStacks = useCallback(async (
+  const depositToSUI = useCallback(async (
     amount: string,
-    stacksRecipient: string
+    suiRecipient: string
   ): Promise<string | null> => {
     if (!walletAddress || !window.ethereum) {
       throw new Error('Wallet not connected');
@@ -231,7 +231,7 @@ export function useEthereumWallet() {
 
     const value = parseUnits(amount, 6);
     const maxFee = parseUnits('0', 6);
-    const remoteRecipient = encodeStacksAddress(stacksRecipient);
+    const remoteRecipient = encodeSUIAddress(suiRecipient);
     const hookData = '0x' as Hex;
 
     const hash = await walletClient.writeContract({
@@ -240,7 +240,7 @@ export function useEthereumWallet() {
       functionName: 'depositToRemote',
       args: [
         value,
-        BRIDGE_CONFIG.STACKS_DOMAIN,
+        BRIDGE_CONFIG.sui_DOMAIN,
         remoteRecipient,
         BRIDGE_CONFIG.ETH_USDC_CONTRACT as Address,
         maxFee,
@@ -270,7 +270,7 @@ export function useEthereumWallet() {
     connect,
     disconnect,
     approveUSDC,
-    depositToStacks,
+    depositToSUI,
     refreshBalances,
     hasMetaMask: typeof window !== 'undefined' && !!window.ethereum,
   };

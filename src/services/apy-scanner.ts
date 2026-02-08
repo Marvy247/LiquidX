@@ -1,19 +1,19 @@
 // APY Comparison & Opportunity Scanner Service
-// Compares yields across Ethereum and Stacks to find arbitrage opportunities
+// Compares yields across Ethereum and SUI to find arbitrage opportunities
 
 export interface Protocol {
   name: string;
-  chain: 'ethereum' | 'stacks';
+  chain: 'ethereum' | 'sui';
   apy: number;
   tvl: bigint;
   riskScore: number; // 1-10 (1=safest, 10=highest risk)
   contractAddress: string;
-  category: 'lending' | 'liquidity' | 'staking';
+  category: 'lending' | 'liquidity' | 'leverage';
 }
 
 export interface OpportunityAlert {
   ethereumAPY: number;
-  stacksAPY: number;
+  suiAPY: number;
   bridgeBonus: number;
   totalAPY: number;
   protocolName: string;
@@ -30,7 +30,7 @@ export interface OpportunityAlert {
 
 class APYScanner {
   private ethereumProtocols: Protocol[] = [];
-  private stacksProtocols: Protocol[] = [];
+  private suiProtocols: Protocol[] = [];
   private lastUpdate: Date = new Date();
 
   constructor() {
@@ -70,43 +70,34 @@ class APYScanner {
       },
     ];
 
-    // Stacks protocols (Testnet)
-    this.stacksProtocols = [
+    // SUI protocols (Testnet)
+    this.suiProtocols = [
       {
-        name: 'ALEX USDCx-STX Pool',
-        chain: 'stacks',
-        apy: 14.8,
-        tvl: BigInt(5000000), // $5M
-        riskScore: 5,
-        contractAddress: 'SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9.alex-vault',
+        name: 'Cetus USDC-SUI Pool',
+        chain: 'sui',
+        apy: 18.0,
+        tvl: BigInt(10000000), // $10M
+        riskScore: 7,
+        contractAddress: '0x0', // Set after deployment
         category: 'liquidity',
       },
       {
-        name: 'Arkadiko Lending',
-        chain: 'stacks',
-        apy: 9.2,
-        tvl: BigInt(3000000),
-        riskScore: 4,
-        contractAddress: 'SPSCWDV3RKV5ZRN1FQD84YE1NQFEDJ9R1F4DYQ11.arkadiko-vault',
-        category: 'lending',
+        name: 'Turbos Finance',
+        chain: 'sui',
+        apy: 22.5,
+        tvl: BigInt(5000000),
+        riskScore: 8,
+        contractAddress: '0x0', // Set after deployment
+        category: 'leverage',
       },
       {
-        name: 'Stackswap USDCx Pool',
-        chain: 'stacks',
-        apy: 11.5,
-        tvl: BigInt(2000000),
+        name: 'Scallop Lending',
+        chain: 'sui',
+        apy: 14.5,
+        tvl: BigInt(8000000),
         riskScore: 6,
-        contractAddress: 'SP1Z92MPDQEWZXW36VX71Q25HKF5K2EPCJ304F275.stackswap-pool',
-        category: 'liquidity',
-      },
-      {
-        name: 'Velar Finance',
-        chain: 'stacks',
-        apy: 8.7,
-        tvl: BigInt(1500000),
-        riskScore: 5,
-        contractAddress: 'SP1Y5YSTAHZ88XYK1VPDH24GY0HPX5J4JECTMY4A1.velar-vault',
-        category: 'staking',
+        contractAddress: '0x0', // Set after deployment
+        category: 'lending',
       },
     ];
   }
@@ -119,10 +110,11 @@ class APYScanner {
       // - Compound API: https://api.compound.finance/api/v2/ctoken
       // - DeFiLlama: https://yields.llama.fi/pools
       
-      // Stacks protocols - would call:
-      // - ALEX API: https://api.alexlab.co/v1/pool_stats
-      // - Arkadiko API (if available)
-      // - Or fetch on-chain data via Stacks API
+      // SUI protocols - would call:
+      // - Cetus API: https://api-sui.cetus.zone/v2/sui/pools
+      // - Turbos Finance API
+      // - Scallop API
+      // - Or fetch on-chain data via SUI RPC
 
       // For now, simulate with random variations
       this.simulateLiveData();
@@ -140,7 +132,7 @@ class APYScanner {
       apy: p.apy + (Math.random() - 0.5) * 0.5, // ±0.25% variation
     }));
 
-    this.stacksProtocols = this.stacksProtocols.map(p => ({
+    this.suiProtocols = this.suiProtocols.map(p => ({
       ...p,
       apy: p.apy + (Math.random() - 0.5) * 2, // ±1% variation
     }));
@@ -182,26 +174,26 @@ class APYScanner {
 
     const bestEthAPY = Math.max(...this.ethereumProtocols.map(p => p.apy));
     
-    const opportunities: OpportunityAlert[] = this.stacksProtocols
-      .filter(stacksProtocol => {
-        // Only show if Stacks APY is significantly better (>2% spread)
-        return stacksProtocol.apy > bestEthAPY + 2;
+    const opportunities: OpportunityAlert[] = this.suiProtocols
+      .filter(suiProtocol => {
+        // Only show if SUI APY is significantly better (>2% spread)
+        return suiProtocol.apy > bestEthAPY + 2;
       })
-      .map(stacksProtocol => {
-        const bridgeBonus = this.calculateBridgeBonus(amount, stacksProtocol);
-        const totalAPY = stacksProtocol.apy + bridgeBonus;
-        const spread = stacksProtocol.apy - bestEthAPY;
+      .map(suiProtocol => {
+        const bridgeBonus = this.calculateBridgeBonus(amount, suiProtocol);
+        const totalAPY = suiProtocol.apy + bridgeBonus;
+        const spread = suiProtocol.apy - bestEthAPY;
 
         return {
           ethereumAPY: bestEthAPY,
-          stacksAPY: stacksProtocol.apy,
+          suiAPY: suiProtocol.apy,
           bridgeBonus,
           totalAPY,
-          protocolName: stacksProtocol.name,
-          protocol: stacksProtocol,
+          protocolName: suiProtocol.name,
+          protocol: suiProtocol,
           spread,
-          tvl: stacksProtocol.tvl,
-          riskScore: stacksProtocol.riskScore,
+          tvl: suiProtocol.tvl,
+          riskScore: suiProtocol.riskScore,
           estimatedEarnings: this.calculateEarnings(amount, totalAPY),
         };
       })
@@ -216,9 +208,9 @@ class APYScanner {
     return opportunities.length > 0 ? opportunities[0] : null;
   }
 
-  // Get all Stacks protocols
-  getStacksProtocols(): Protocol[] {
-    return this.stacksProtocols;
+  // Get all SUI protocols
+  getSuiProtocols(): Protocol[] {
+    return this.suiProtocols;
   }
 
   // Get all Ethereum protocols
@@ -244,7 +236,10 @@ class APYScanner {
 export const apyScanner = new APYScanner();
 
 // Helper function to format APY
-export function formatAPY(apy: number): string {
+export function formatAPY(apy: number | undefined): string {
+  if (apy === undefined || apy === null || isNaN(apy)) {
+    return '0.0%';
+  }
   return `${apy.toFixed(1)}%`;
 }
 

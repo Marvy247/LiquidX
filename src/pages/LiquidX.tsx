@@ -5,6 +5,8 @@ import { OpportunityScanner } from "@/components/liquidx/OpportunityScanner";
 import { EnhancedBridgeForm } from "@/components/liquidx/EnhancedBridgeForm";
 import { RewardsDashboard } from "@/components/liquidx/RewardsDashboard";
 import { Leaderboard } from "@/components/liquidx/Leaderboard";
+import { OnboardingTutorial } from "@/components/liquidx/OnboardingTutorial";
+import { GlobalStatsSkeleton } from "@/components/liquidx/LoadingSkeletons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,25 +16,33 @@ import {
   Users, 
   DollarSign, 
   ArrowRightLeft,
-  Sparkles,
   ExternalLink
 } from "lucide-react";
+import { LogoInline } from "@/components/Logo";
 import { getGlobalStats } from "@/services/contract-service";
 import { formatCurrency } from "@/services/apy-scanner";
+import { isDemoMode, DEMO_STATS, getDemoBalance } from "@/lib/demo-mode";
 import type { OpportunityAlert } from "@/services/apy-scanner";
 
 const LiquidX = () => {
+  const demoMode = isDemoMode();
+  
   const {
     isConnected: isEthConnected,
     address: ethAddress,
     ethBalance,
     usdcBalance,
     approveUSDC,
-    depositToStacks,
+    depositToSui,
   } = useBridge();
+
+  // In demo mode with wallet: use real wallet connection but demo balances (optional)
+  const effectiveEthBalance = getDemoBalance(ethBalance, 'eth');
+  const effectiveUsdcBalance = getDemoBalance(usdcBalance, 'usdc');
 
   const [selectedOpportunity, setSelectedOpportunity] = useState<OpportunityAlert | undefined>();
   const [bridgeAmount, setBridgeAmount] = useState<number>(5000);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
 
   const [globalStats, setGlobalStats] = useState({
     totalLiquidityBridged: 0,
@@ -44,14 +54,25 @@ const LiquidX = () => {
   // Fetch global stats from contract
   useEffect(() => {
     async function fetchGlobalStats() {
+      setIsLoadingStats(true);
       try {
-        const stats = await getGlobalStats();
-        setGlobalStats({
-          ...stats,
-          averageAPY: 16.2, // Calculate from protocols
-        });
+        if (demoMode) {
+          // Use demo stats
+          await new Promise(resolve => setTimeout(resolve, 800)); // Simulate loading
+          setGlobalStats(DEMO_STATS);
+        } else {
+          const stats = await getGlobalStats();
+          setGlobalStats({
+            ...stats,
+            averageAPY: 16.2, // Calculate from protocols
+          });
+        }
       } catch (error) {
         console.error('Failed to fetch global stats:', error);
+        // Fallback to demo stats on error
+        setGlobalStats(DEMO_STATS);
+      } finally {
+        setIsLoadingStats(false);
       }
     }
 
@@ -60,7 +81,7 @@ const LiquidX = () => {
     // Refresh every 60 seconds
     const interval = setInterval(fetchGlobalStats, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [demoMode]);
 
   const handleClaimRewards = async () => {
     // TODO: Implement actual claim rewards contract call
@@ -70,6 +91,20 @@ const LiquidX = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Onboarding Tutorial */}
+      <OnboardingTutorial />
+      
+      {/* Demo Mode Banner */}
+      {demoMode && (
+        <div className="bg-yellow-500/10 border-b border-yellow-500/30 py-2 animate-slide-down">
+          <div className="container mx-auto px-4">
+            <p className="text-center text-sm text-yellow-600 dark:text-yellow-400 font-medium">
+              🎭 Demo Mode Active - Transactions are simulated (connect your wallet to see the full flow)
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Elegant Background Pattern */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-[0.02]">
         <div className="absolute top-0 left-0 w-full h-full" 
@@ -87,10 +122,8 @@ const LiquidX = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shadow-lg border border-gray-200">
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-black rounded-full border-2 border-background" />
+                  <LogoInline className="w-12 h-12" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-background animate-pulse" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold tracking-tight" style={{ 
@@ -101,7 +134,7 @@ const LiquidX = () => {
                     LiquidX
                   </h1>
                   <p className="text-xs text-muted-foreground font-medium">
-                    Premium Bridge • Ethereum → Stacks
+                    Premium Bridge • Ethereum → SUI
                   </p>
                 </div>
                 <Badge className="ml-2 bg-black text-white border-none px-3 py-1">
@@ -117,51 +150,55 @@ const LiquidX = () => {
         {/* Global Stats Banner */}
         <div className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
           <div className="container mx-auto px-4 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <DollarSign className="w-5 h-5 text-black" />
-                  <span className="text-sm text-muted-foreground font-medium">Total Bridged</span>
+            {isLoadingStats ? (
+              <GlobalStatsSkeleton />
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="text-center animate-fade-in">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <DollarSign className="w-5 h-5 text-black" />
+                    <span className="text-sm text-muted-foreground font-medium">Total Bridged</span>
+                  </div>
+                  <div className="text-3xl font-bold text-black">
+                    {formatCurrency(globalStats.totalLiquidityBridged)}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">USDCx on SUI</p>
                 </div>
-                <div className="text-3xl font-bold text-black">
-                  {formatCurrency(globalStats.totalLiquidityBridged)}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">USDCx on Stacks</p>
-              </div>
 
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Zap className="w-5 h-5 text-black" />
-                  <span className="text-sm text-muted-foreground font-medium">Rewards Paid</span>
+                <div className="text-center animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Zap className="w-5 h-5 text-black" />
+                    <span className="text-sm text-muted-foreground font-medium">Rewards Paid</span>
+                  </div>
+                  <div className="text-3xl font-bold text-black">
+                    {globalStats.totalRewardsDistributed.toLocaleString()}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">$LQX Tokens</p>
                 </div>
-                <div className="text-3xl font-bold text-black">
-                  {globalStats.totalRewardsDistributed.toLocaleString()}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">$LQX Tokens</p>
-              </div>
 
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Users className="w-5 h-5 text-black" />
-                  <span className="text-sm text-muted-foreground font-medium">Active Users</span>
+                <div className="text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Users className="w-5 h-5 text-black" />
+                    <span className="text-sm text-muted-foreground font-medium">Active Users</span>
+                  </div>
+                  <div className="text-3xl font-bold text-black">
+                    {globalStats.totalUsers.toLocaleString()}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Liquidity Providers</p>
                 </div>
-                <div className="text-3xl font-bold text-black">
-                  {globalStats.totalUsers.toLocaleString()}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Liquidity Providers</p>
-              </div>
 
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <TrendingUp className="w-5 h-5 text-black" />
-                  <span className="text-sm text-muted-foreground font-medium">Avg APY</span>
+                <div className="text-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <TrendingUp className="w-5 h-5 text-black" />
+                    <span className="text-sm text-muted-foreground font-medium">Avg APY</span>
+                  </div>
+                  <div className="text-3xl font-bold text-black">
+                    {globalStats.averageAPY}%
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">With Bonuses</p>
                 </div>
-                <div className="text-3xl font-bold text-black">
-                  {globalStats.averageAPY}%
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">With Bonuses</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -170,17 +207,17 @@ const LiquidX = () => {
           <div className="max-w-7xl mx-auto">
             {/* Hero Section */}
             {!isEthConnected && (
-              <div className="text-center mb-12">
+              <div className="text-center mb-12 animate-slide-up">
                 <h2 className="text-5xl font-bold mb-4 text-black">
                   Earn While You Bridge
                 </h2>
                 <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light">
-                  Bridge USDC from Ethereum to Stacks and earn $LQX rewards. 
+                  Bridge USDC from Ethereum to SUI and earn $LQX rewards. 
                   Auto-deploy to the highest yields. Climb the leaderboard. Get paid.
                 </p>
                 <div className="flex items-center justify-center gap-4 mt-8">
                   <Badge className="text-sm px-4 py-2 bg-black text-white border-none font-medium">
-                    Powered by Circle xReserve
+                    Powered by Wormhole
                   </Badge>
                   <Badge className="text-sm px-4 py-2 bg-gray-100 text-black border border-gray-200 font-medium">
                     Up to 3x Rewards Multiplier
@@ -205,7 +242,7 @@ const LiquidX = () => {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="bridge" className="space-y-8">
+              <TabsContent value="bridge" className="space-y-8 animate-fade-in">
                 <div className="grid lg:grid-cols-2 gap-8">
                   {/* Left: Opportunity Scanner */}
                   <div>
@@ -222,10 +259,10 @@ const LiquidX = () => {
                   <div className="space-y-6">
                     <EnhancedBridgeForm
                       isConnected={isEthConnected}
-                      usdcBalance={usdcBalance}
-                      ethBalance={ethBalance}
+                      usdcBalance={effectiveUsdcBalance}
+                      ethBalance={effectiveEthBalance}
                       onApprove={approveUSDC}
-                      onDeposit={depositToStacks}
+                      onDeposit={depositToSui}
                       selectedOpportunity={selectedOpportunity}
                     />
 
@@ -274,7 +311,7 @@ const LiquidX = () => {
                         </div>
                         <h4 className="font-semibold text-foreground mb-2">Bridge USDC</h4>
                         <p className="text-sm text-muted-foreground">
-                          Transfer USDC from Ethereum to Stacks via Circle's xReserve protocol
+                          Transfer USDC from Ethereum to SUI via Circle's xReserve protocol
                         </p>
                       </div>
                       <div className="text-center">
@@ -283,7 +320,7 @@ const LiquidX = () => {
                         </div>
                         <h4 className="font-semibold text-foreground mb-2">Auto-Deploy & Earn</h4>
                         <p className="text-sm text-muted-foreground">
-                          Automatically enter the highest-yield DeFi protocols on Stacks
+                          Automatically enter the highest-yield DeFi protocols on SUI
                         </p>
                       </div>
                       <div className="text-center">
@@ -300,7 +337,7 @@ const LiquidX = () => {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="rewards" className="space-y-8">
+              <TabsContent value="rewards" className="space-y-8 animate-fade-in">
                 {isEthConnected && ethAddress && (
                   <RewardsDashboard
                     userAddress={ethAddress}
@@ -309,7 +346,7 @@ const LiquidX = () => {
                 )}
               </TabsContent>
 
-              <TabsContent value="leaderboard" className="space-y-8">
+              <TabsContent value="leaderboard" className="space-y-8 animate-fade-in">
                 <Leaderboard userAddress={ethAddress} />
               </TabsContent>
             </Tabs>
@@ -321,7 +358,7 @@ const LiquidX = () => {
           <div className="container mx-auto px-4">
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center gap-2">
-                <Sparkles className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-blue-500" />
                 <p className="text-sm text-muted-foreground">
                   Powered by{" "}
                   <a
@@ -330,23 +367,23 @@ const LiquidX = () => {
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium"
                   >
-                    Circle xReserve
+                    Wormhole
                   </a>
                   {" "}+{" "}
                   <a
-                    href="https://www.stacks.co"
+                    href="https://www.sui.co"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium"
                   >
-                    Stacks
+                    SUI
                   </a>
                 </p>
               </div>
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-                <span>Network: Ethereum Sepolia ↔ Stacks Testnet</span>
+                <span>Network: Ethereum Sepolia ↔ SUI Testnet</span>
                 <span>•</span>
-                <span>Built for USDCx Hackathon 2026</span>
+                <span>Built for The SUI Ecosystem</span>
               </div>
             </div>
           </div>

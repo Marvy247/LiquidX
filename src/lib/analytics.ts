@@ -4,14 +4,14 @@ import { track } from '@vercel/analytics'
 // WALLET ANALYTICS
 // ============================================
 
-export const trackWalletConnected = (walletType: string, chain: 'ethereum' | 'stacks') => {
+export const trackWalletConnected = (walletType: string, chain: 'ethereum' | 'sui') => {
   track('wallet_connected', {
     wallet: walletType,
     chain,
   })
 }
 
-export const trackWalletDisconnected = (chain: 'ethereum' | 'stacks') => {
+export const trackWalletDisconnected = (chain: 'ethereum' | 'sui') => {
   track('wallet_disconnected', {
     chain,
   })
@@ -78,13 +78,13 @@ export const trackBridgeFailed = (
 }
 
 // ============================================
-// TRANSFER ANALYTICS (Stacks to Stacks)
+// TRANSFER ANALYTICS (SUI to SUI)
 // ============================================
 
 export const trackTransferInitiated = (amount: string) => {
   track('transfer_initiated', {
     amount,
-    chain: 'stacks',
+    chain: 'sui',
   })
 }
 
@@ -92,14 +92,14 @@ export const trackTransferCompleted = (amount: string, txId: string) => {
   track('transfer_completed', {
     amount,
     txId,
-    chain: 'stacks',
+    chain: 'sui',
   })
 }
 
 export const trackTransferFailed = (errorMessage: string) => {
   track('transfer_failed', {
     error: errorMessage,
-    chain: 'stacks',
+    chain: 'sui',
   })
 }
 

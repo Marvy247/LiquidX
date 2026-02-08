@@ -247,7 +247,7 @@ export function RewardsDashboard({ userAddress, onClaimRewards }: RewardsDashboa
             </div>
             <Progress value={vestingProgress} className="h-2" />
             <p className="text-xs text-muted-foreground mt-2">
-              Rewards vest over 90 days to keep liquidity on Stacks
+              Rewards vest over 90 days to keep liquidity on SUI
             </p>
           </div>
         </CardContent>

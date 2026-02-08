@@ -1,5 +1,5 @@
 import { useBridge } from "@/hooks/useBridge";
-import { useStacksWallet } from "@/hooks/useStacksWallet";
+import { useSUIWallet } from "@/hooks/useSUIWallet";
 import { ConnectWalletButton } from "@/components/bridge/ConnectWalletButton";
 import { BridgeForm } from "@/components/bridge/BridgeForm";
 import { TransferForm } from "@/components/bridge/TransferForm";
@@ -14,19 +14,19 @@ const Index = () => {
     usdcBalance,
     refreshBalances,
     approveUSDC,
-    depositToStacks,
+    depositToSUI,
   } = useBridge();
 
   const {
-    stacksAddress,
-    isConnected: isStacksConnected,
+    suiAddress,
+    isConnected: isSUIConnected,
     usdcxBalance,
-    isLoading: isStacksLoading,
-    connectWallet: connectStacksWallet,
-    disconnectWallet: disconnectStacksWallet,
+    isLoading: isSUILoading,
+    connectWallet: connectSUIWallet,
+    disconnectWallet: disconnectSUIWallet,
     transferUsdcx,
-    refreshBalance: refreshStacksBalance,
-  } = useStacksWallet();
+    refreshBalance: refreshSUIBalance,
+  } = useSUIWallet();
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,7 +68,7 @@ const Index = () => {
                 <span className="text-foreground"> ↔ USDCx</span>
               </h2>
               <p className="text-muted-foreground text-lg">
-                Blazing fast bridging between Ethereum and Stacks
+                Blazing fast bridging between Ethereum and SUI
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 Powered by Circle's xReserve Protocol
@@ -103,13 +103,13 @@ const Index = () => {
                   usdcBalance={usdcBalance}
                   ethBalance={ethBalance}
                   onApprove={approveUSDC}
-                  onDeposit={depositToStacks}
+                  onDeposit={depositToSUI}
                 />
               </TabsContent>
 
               <TabsContent value="transfer" className="space-y-6">
-                {/* Stacks Balance Display */}
-                {isStacksConnected && (
+                {/* SUI Balance Display */}
+                {isSUIConnected && (
                   <div className="bg-card border border-border rounded-xl p-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -117,7 +117,7 @@ const Index = () => {
                         <p className="text-2xl font-bold text-foreground">{parseFloat(usdcxBalance).toFixed(2)} USDCx</p>
                       </div>
                       <button 
-                        onClick={refreshStacksBalance}
+                        onClick={refreshSUIBalance}
                         className="text-muted-foreground hover:text-foreground transition-colors"
                       >
                         ↻
@@ -128,13 +128,13 @@ const Index = () => {
 
                 {/* Transfer Form */}
                 <TransferForm
-                  isConnected={isStacksConnected}
-                  stacksAddress={stacksAddress}
+                  isConnected={isSUIConnected}
+                  suiAddress={suiAddress}
                   usdcxBalance={usdcxBalance}
-                  onConnect={connectStacksWallet}
-                  onDisconnect={disconnectStacksWallet}
+                  onConnect={connectSUIWallet}
+                  onDisconnect={disconnectSUIWallet}
                   onTransfer={transferUsdcx}
-                  isLoading={isStacksLoading}
+                  isLoading={isSUILoading}
                 />
               </TabsContent>
             </Tabs>
@@ -172,7 +172,7 @@ const Index = () => {
             {/* Network Info */}
             <div className="bg-card border border-border rounded-xl p-4 text-center">
               <p className="text-xs text-muted-foreground">
-                Network: <span className="text-foreground">Ethereum Sepolia</span> ↔ <span className="text-foreground">Stacks Testnet</span>
+                Network: <span className="text-foreground">Ethereum Sepolia</span> ↔ <span className="text-foreground">SUI Testnet</span>
               </p>
             </div>
           </div>
@@ -189,7 +189,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="text-primary hover:underline"
               >
-                Circle xReserve
+                Wormhole
               </a>
             </p>
             <div className="flex items-center justify-center">

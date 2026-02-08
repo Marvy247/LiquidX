@@ -6,11 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { ArrowDown, Loader2, CheckCircle2, Zap, TrendingUp, Gift, Users, X, ExternalLink } from "lucide-react";
-import { isValidStacksAddress } from "@/lib/stacks-address";
+import { isValidSuiAddress } from "@/lib/sui-address";
 import { toast } from "sonner";
 import { formatAPY, formatCurrency, type OpportunityAlert } from "@/services/apy-scanner";
 import { prepareRegisterBridgeTransaction, waitForTransactionConfirmation, getTxExplorerUrl } from "@/services/contract-service";
-import { request } from '@stacks/connect';
+import { shouldSimulateTransactions, simulateTransaction } from "@/lib/demo-mode";
+import { SuiWalletButton } from "@/components/bridge/SuiWalletButton";
+
 
 interface EnhancedBridgeFormProps {
   isConnected: boolean;
@@ -33,12 +35,12 @@ export function EnhancedBridgeForm({
   selectedOpportunity,
 }: EnhancedBridgeFormProps) {
   const [amount, setAmount] = useState("");
-  const [stacksAddress, setStacksAddress] = useState("");
+  const [suiAddress, setSUIAddress] = useState("");
   const [deploymentOption, setDeploymentOption] = useState<DeploymentOption>('auto-deploy');
   const [referralCode, setReferralCode] = useState("");
   const [step, setStep] = useState<BridgeStep>('input');
   const [txHash, setTxHash] = useState<string | null>(null);
-  const [stacksTxId, setStacksTxId] = useState<string | null>(null);
+  const [suiTxId, setSUITxId] = useState<string | null>(null);
 
   // Auto-fill amount if opportunity is selected
   useEffect(() => {
@@ -50,7 +52,7 @@ export function EnhancedBridgeForm({
   const parsedAmount = parseFloat(amount) || 0;
   const balance = parseFloat(usdcBalance) || 0;
   const hasEnoughBalance = parsedAmount > 0 && parsedAmount <= balance;
-  const isValidAddress = stacksAddress ? isValidStacksAddress(stacksAddress) : false;
+  const isValidAddress = suiAddress ? isValidSuiAddress(suiAddress) : false;
   const canProceed = hasEnoughBalance && isValidAddress && parseFloat(ethBalance) > 0;
 
   // Calculate rewards
@@ -72,7 +74,17 @@ export function EnhancedBridgeForm({
     
     setStep('approving');
     try {
-      const hash = await onApprove(amount);
+      let hash: string | null;
+      
+      if (shouldSimulateTransactions()) {
+        // Simulate transaction in demo mode
+        toast.info("🎭 Demo Mode: Simulating approval transaction...");
+        hash = await simulateTransaction(2000);
+      } else {
+        // Real transaction
+        hash = await onApprove(amount);
+      }
+      
       if (hash) {
         setStep('approved');
         toast.success("USDC approved! Ready to bridge.");
@@ -89,25 +101,44 @@ export function EnhancedBridgeForm({
     
     setStep('depositing');
     try {
-      const hash = await onDeposit(amount, stacksAddress);
+      let hash: string | null;
+      
+      if (shouldSimulateTransactions()) {
+        // Simulate transaction in demo mode
+        toast.info("🎭 Demo Mode: Simulating bridge transaction...");
+        hash = await simulateTransaction(3000);
+      } else {
+        // Real transaction
+        hash = await onDeposit(amount, suiAddress);
+      }
+      
       if (hash) {
         setTxHash(hash);
         setStep('complete');
         
         // Register bridge position with LiquidX contract
         try {
-          const stacksTx = await registerBridgeWithContract(
-            stacksAddress,
-            parsedAmount,
-            hash,
-            deploymentOption === 'auto-deploy',
-            selectedOpportunity?.protocolName || 'Manual Deployment',
-            referralCode || undefined
-          );
-          if (stacksTx) {
-            setStacksTxId(stacksTx);
+          if (shouldSimulateTransactions()) {
+            // Simulate contract registration
+            toast.info("🎭 Demo Mode: Simulating rewards registration...");
+            const suiTx = await simulateTransaction(2000);
+            setSUITxId(suiTx);
+            toast.success("🎉 Bridge successful! $LQX rewards registered (simulated).");
+          } else {
+            // Real contract registration
+            const suiTx = await registerBridgeWithContract(
+              suiAddress,
+              parsedAmount,
+              hash,
+              deploymentOption === 'auto-deploy',
+              selectedOpportunity?.protocolName || 'Manual Deployment',
+              referralCode || undefined
+            );
+            if (suiTx) {
+              setSUITxId(suiTx);
+            }
+            toast.success("🎉 Bridge successful! $LQX rewards registered on-chain.");
           }
-          toast.success("🎉 Bridge successful! $LQX rewards registered on-chain.");
         } catch (contractError) {
           console.error('Failed to register with contract:', contractError);
           toast.warning("Bridge successful, but rewards registration pending. Please try again later.");
@@ -124,7 +155,7 @@ export function EnhancedBridgeForm({
     setAmount("");
     setStep('input');
     setTxHash(null);
-    setStacksTxId(null);
+    setSuiTxId(null);
   };
 
   // Register bridge with LiquidX contract
@@ -146,7 +177,7 @@ export function EnhancedBridgeForm({
         referrer
       );
 
-      // Call contract via Stacks Connect
+      // Call contract via SUI Connect
       const response = await request('stx_callContract', {
         contract: `${txData.contractAddress}.${txData.contractName}`,
         functionName: txData.functionName,
@@ -200,7 +231,7 @@ export function EnhancedBridgeForm({
           </div>
           <h3 className="text-2xl font-bold text-foreground mb-2">Bridge Complete!</h3>
           <p className="text-muted-foreground mb-4">
-            {amount} USDC bridged to Stacks
+            {amount} USDC bridged to SUI
           </p>
 
           {/* Transaction Links */}
@@ -214,16 +245,16 @@ export function EnhancedBridgeForm({
               <span>View on Sepolia</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
-            {stacksTxId && (
+            {suiTxId && (
               <>
                 <span className="text-muted-foreground">•</span>
                 <a
-                  href={`https://explorer.hiro.so/txid/${stacksTxId}?chain=testnet`}
+                  href={`https://explorer.hiro.so/txid/${suiTxId}?chain=testnet`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-sm font-medium text-black hover:text-black/70 transition-colors underline underline-offset-4"
                 >
-                  <span>View on Stacks</span>
+                  <span>View on SUI</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </>
@@ -281,7 +312,7 @@ export function EnhancedBridgeForm({
         <CardDescription>
           {selectedOpportunity 
             ? `Bridge to ${selectedOpportunity.protocolName} • ${formatAPY(selectedOpportunity.totalAPY)} Total APY`
-            : "Transfer USDC from Ethereum to Stacks with rewards"}
+            : "Transfer USDC from Ethereum to SUI with rewards"}
         </CardDescription>
       </CardHeader>
 
@@ -322,14 +353,21 @@ export function EnhancedBridgeForm({
           </div>
         </div>
 
-        {/* Stacks Address */}
+        {/* SUI Address */}
         <div className="bg-secondary rounded-xl p-4 space-y-3">
-          <Label className="text-muted-foreground">Stacks Address</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-muted-foreground">SUI Address</Label>
+            <SuiWalletButton 
+              onAddressChange={(address) => setSUIAddress(address)}
+              variant="ghost"
+              size="sm"
+            />
+          </div>
           <Input
             type="text"
-            placeholder="ST... (Stacks testnet address)"
-            value={stacksAddress}
-            onChange={(e) => setStacksAddress(e.target.value)}
+            placeholder="0x... (SUI address) or connect wallet above"
+            value={suiAddress}
+            onChange={(e) => setSUIAddress(e.target.value)}
             className="font-mono text-sm"
             disabled={step !== 'input'}
           />
@@ -356,7 +394,7 @@ export function EnhancedBridgeForm({
                 </label>
                 <p className="text-xs text-muted-foreground mt-1">
                   {selectedOpportunity 
-                    ? `Automatically enter ${selectedOpportunity.protocolName} (${formatAPY(selectedOpportunity.stacksAPY)} APY)`
+                    ? `Automatically enter ${selectedOpportunity.protocolName} (${formatAPY(selectedOpportunity.suiAPY)} APY)`
                     : "One-click entry to best DeFi protocol"}
                 </p>
               </div>
@@ -452,7 +490,7 @@ export function EnhancedBridgeForm({
               className="w-full gradient-bitcoin text-primary-foreground font-semibold py-6 text-lg rounded-xl glow-orange"
             >
               <TrendingUp className="w-5 h-5 mr-2" />
-              Bridge to Stacks
+              Bridge to SUI
             </Button>
           )}
 

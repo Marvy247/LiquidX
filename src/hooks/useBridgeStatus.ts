@@ -5,14 +5,14 @@ export type BridgeStatus =
   | 'depositing'        // Ethereum tx pending
   | 'eth_confirmed'     // Ethereum tx confirmed, waiting for attestation
   | 'attesting'         // Attestation in progress
-  | 'minting'           // Stacks mint tx detected
+  | 'minting'           // SUI mint tx detected
   | 'completed'         // USDCx received
   | 'error';
 
 interface BridgeStatusState {
   status: BridgeStatus;
   ethTxHash: string | null;
-  stacksTxHash: string | null;
+  suiTxHash: string | null;
   errorMessage: string | null;
   startTime: number | null;
   elapsedTime: number;
@@ -26,7 +26,7 @@ export function useBridgeStatus() {
   const [state, setState] = useState<BridgeStatusState>({
     status: 'idle',
     ethTxHash: null,
-    stacksTxHash: null,
+    suiTxHash: null,
     errorMessage: null,
     startTime: null,
     elapsedTime: 0,
@@ -55,10 +55,10 @@ export function useBridgeStatus() {
   }, [state.startTime, state.status]);
 
   // Check if USDCx balance has increased for a specific address
-  const checkUsdcxBalance = useCallback(async (stacksAddress: string): Promise<string> => {
+  const checkUsdcxBalance = useCallback(async (suiAddress: string): Promise<string> => {
     try {
       const response = await fetch(
-        `https://api.testnet.hiro.so/extended/v1/address/${stacksAddress}/balances`
+        `https://api.testnet.hiro.so/extended/v1/address/${suiAddress}/balances`
       );
       const data = await response.json();
       
@@ -71,12 +71,12 @@ export function useBridgeStatus() {
     }
   }, []);
 
-  // Check recent transactions on Stacks for mint events
-  const checkStacksMintTx = useCallback(async (stacksAddress: string): Promise<string | null> => {
+  // Check recent transactions on SUI for mint events
+  const checkSUIMintTx = useCallback(async (suiAddress: string): Promise<string | null> => {
     try {
       // Check recent transactions to the usdcx-v1 contract
       const response = await fetch(
-        `https://api.testnet.hiro.so/extended/v1/address/${stacksAddress}/transactions?limit=10`
+        `https://api.testnet.hiro.so/extended/v1/address/${suiAddress}/transactions?limit=10`
       );
       const data = await response.json();
       
@@ -91,7 +91,7 @@ export function useBridgeStatus() {
       
       // Also check pending transactions
       const pendingResponse = await fetch(
-        `https://api.testnet.hiro.so/extended/v1/tx/mempool?recipient_address=${stacksAddress}&limit=20`
+        `https://api.testnet.hiro.so/extended/v1/tx/mempool?recipient_address=${suiAddress}&limit=20`
       );
       const pendingData = await pendingResponse.json();
       
@@ -103,7 +103,7 @@ export function useBridgeStatus() {
       
       return null;
     } catch (error) {
-      console.error('Error checking Stacks mint tx:', error);
+      console.error('Error checking SUI mint tx:', error);
       return null;
     }
   }, []);
@@ -111,7 +111,7 @@ export function useBridgeStatus() {
   // Start monitoring bridge status
   const startMonitoring = useCallback(async (
     ethTxHash: string,
-    stacksAddress: string,
+    suiAddress: string,
     expectedAmount: string
   ) => {
     // Clear any existing polling
@@ -120,18 +120,18 @@ export function useBridgeStatus() {
     }
 
     // Get initial balance
-    initialBalanceRef.current = await checkUsdcxBalance(stacksAddress);
+    initialBalanceRef.current = await checkUsdcxBalance(suiAddress);
     
     setState({
       status: 'eth_confirmed',
       ethTxHash,
-      stacksTxHash: null,
+      suiTxHash: null,
       errorMessage: null,
       startTime: Date.now(),
       elapsedTime: 0,
     });
 
-    // Start polling for Stacks transaction/balance
+    // Start polling for SUI transaction/balance
     let pollCount = 0;
     const maxPolls = 120; // Poll for up to 20 minutes (10 second intervals)
     
@@ -139,17 +139,17 @@ export function useBridgeStatus() {
       pollCount++;
       
       // Check for mint transaction
-      const mintTxHash = await checkStacksMintTx(stacksAddress);
+      const mintTxHash = await checkSUIMintTx(suiAddress);
       if (mintTxHash) {
         setState(prev => ({
           ...prev,
           status: 'minting',
-          stacksTxHash: mintTxHash,
+          suiTxHash: mintTxHash,
         }));
       }
       
       // Check if balance increased
-      const currentBalance = await checkUsdcxBalance(stacksAddress);
+      const currentBalance = await checkUsdcxBalance(suiAddress);
       const initialBalance = initialBalanceRef.current || '0';
       
       if (BigInt(currentBalance) > BigInt(initialBalance)) {
@@ -157,7 +157,7 @@ export function useBridgeStatus() {
         setState(prev => ({
           ...prev,
           status: 'completed',
-          stacksTxHash: mintTxHash || prev.stacksTxHash,
+          suiTxHash: mintTxHash || prev.suiTxHash,
         }));
         
         if (pollingRef.current) {
@@ -180,7 +180,7 @@ export function useBridgeStatus() {
         setState(prev => ({
           ...prev,
           status: 'error',
-          errorMessage: 'Bridge timeout - please check Stacks explorer manually',
+          errorMessage: 'Bridge timeout - please check SUI explorer manually',
         }));
         
         if (pollingRef.current) {
@@ -190,7 +190,7 @@ export function useBridgeStatus() {
       }
     }, 10000); // Poll every 10 seconds
     
-  }, [checkUsdcxBalance, checkStacksMintTx]);
+  }, [checkUsdcxBalance, checkSUIMintTx]);
 
   // Stop monitoring
   const stopMonitoring = useCallback(() => {
@@ -210,7 +210,7 @@ export function useBridgeStatus() {
     setState({
       status: 'idle',
       ethTxHash: null,
-      stacksTxHash: null,
+      suiTxHash: null,
       errorMessage: null,
       startTime: null,
       elapsedTime: 0,

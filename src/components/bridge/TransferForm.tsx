@@ -4,12 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, ExternalLink, AlertCircle, CheckCircle2, Send, Wallet } from "lucide-react";
-import { isValidStacksAddress } from "@/lib/stacks-address";
+import { isValidSuiAddress } from "@/lib/sui-address";
 import { toast } from "sonner";
 
 interface TransferFormProps {
   isConnected: boolean;
-  stacksAddress: string | null;
+  suiAddress: string | null;
   usdcxBalance: string;
   onConnect: () => void;
   onDisconnect: () => void;
@@ -21,7 +21,7 @@ type TransferStep = 'input' | 'transferring' | 'complete';
 
 export function TransferForm({
   isConnected,
-  stacksAddress,
+  suiAddress,
   usdcxBalance,
   onConnect,
   onDisconnect,
@@ -38,7 +38,7 @@ export function TransferForm({
   const parsedAmount = parseFloat(amount) || 0;
   const balance = parseFloat(usdcxBalance) || 0;
   const hasEnoughBalance = parsedAmount > 0 && parsedAmount <= balance;
-  const isValidRecipient = recipient ? isValidStacksAddress(recipient) : false;
+  const isValidRecipient = recipient ? isValidSUIAddress(recipient) : false;
   const canTransfer = hasEnoughBalance && isValidRecipient && !isLoading;
 
   const handleTransfer = async () => {
@@ -81,7 +81,7 @@ export function TransferForm({
         <CardHeader>
           <CardTitle className="text-xl text-foreground">Transfer USDCx</CardTitle>
           <CardDescription>
-            Send USDCx to another Stacks address
+            Send USDCx to another SUI address
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -90,13 +90,13 @@ export function TransferForm({
               <Wallet className="w-8 h-8 text-muted-foreground" />
             </div>
             <p className="text-muted-foreground text-lg mb-6">
-              Connect your Stacks wallet to transfer USDCx
+              Connect your SUI wallet to transfer USDCx
             </p>
             <Button 
               onClick={onConnect}
               className="gradient-bitcoin text-primary-foreground font-semibold px-8 py-3 rounded-xl"
             >
-              Connect Stacks Wallet
+              Connect SUI Wallet
             </Button>
           </div>
         </CardContent>
@@ -117,7 +117,7 @@ export function TransferForm({
             </div>
             <h3 className="text-2xl font-bold text-foreground mb-2">Transfer Submitted!</h3>
             <p className="text-muted-foreground mb-4">
-              Your {amount} USDCx transfer has been submitted to the Stacks network.
+              Your {amount} USDCx transfer has been submitted to the SUI network.
             </p>
             <div className="bg-secondary rounded-xl p-4 mb-6">
               <p className="text-sm text-muted-foreground mb-2">Transaction ID</p>
@@ -145,7 +145,7 @@ export function TransferForm({
       <CardHeader>
         <CardTitle className="text-xl text-foreground">Transfer USDCx</CardTitle>
         <CardDescription>
-          Send USDCx to another Stacks address on testnet
+          Send USDCx to another SUI address on testnet
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -158,7 +158,7 @@ export function TransferForm({
             <div>
               <p className="text-sm text-green-500 font-medium">Connected</p>
               <p className="text-xs text-muted-foreground font-mono">
-                {stacksAddress?.slice(0, 8)}...{stacksAddress?.slice(-6)}
+                {suiAddress?.slice(0, 8)}...{suiAddress?.slice(-6)}
               </p>
             </div>
           </div>
@@ -209,18 +209,18 @@ export function TransferForm({
           <Label className="text-muted-foreground">Recipient Address</Label>
           <Input
             type="text"
-            placeholder="ST... (Stacks testnet address)"
+            placeholder="ST... (SUI testnet address)"
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
             className="font-mono text-sm"
             disabled={step !== 'input'}
           />
           {recipient && !isValidRecipient && (
-            <p className="text-destructive text-sm">Invalid Stacks address (must start with ST for testnet)</p>
+            <p className="text-destructive text-sm">Invalid SUI address (must start with ST for testnet)</p>
           )}
           {isValidRecipient && (
             <p className="text-green-500 text-sm flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4" /> Valid Stacks address
+              <CheckCircle2 className="w-4 h-4" /> Valid SUI address
             </p>
           )}
         </div>
@@ -272,7 +272,7 @@ export function TransferForm({
 
         {/* Info */}
         <div className="text-center text-sm text-muted-foreground">
-          <p>USDCx Token on Stacks Testnet</p>
+          <p>USDCx Token on SUI Testnet</p>
         </div>
       </CardContent>
     </Card>

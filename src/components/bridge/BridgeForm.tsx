@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDown, Loader2, ExternalLink, AlertCircle, CheckCircle2, Clock, Zap } from "lucide-react";
-import { isValidStacksAddress } from "@/lib/stacks-address";
+import { isValidSuiAddress } from "@/lib/sui-address";
 import { toast } from "sonner";
 import { useBridgeStatus, type BridgeStatus } from "@/hooks/useBridgeStatus";
 
@@ -26,7 +26,7 @@ export function BridgeForm({
   onDeposit,
 }: BridgeFormProps) {
   const [amount, setAmount] = useState("");
-  const [stacksAddress, setStacksAddress] = useState("");
+  const [suiAddress, setSUIAddress] = useState("");
   const [step, setStep] = useState<BridgeStep>('input');
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export function BridgeForm({
   const parsedAmount = parseFloat(amount) || 0;
   const balance = parseFloat(usdcBalance) || 0;
   const hasEnoughBalance = parsedAmount > 0 && parsedAmount <= balance;
-  const isValidAddress = stacksAddress ? isValidStacksAddress(stacksAddress) : false;
+  const isValidAddress = suiAddress ? isValidSUIAddress(suiAddress) : false;
   const canProceed = hasEnoughBalance && isValidAddress && parseFloat(ethBalance) > 0;
 
   const handleApprove = async () => {
@@ -74,12 +74,12 @@ export function BridgeForm({
     setStep('depositing');
     
     try {
-      const hash = await onDeposit(amount, stacksAddress);
+      const hash = await onDeposit(amount, suiAddress);
       if (hash) {
         setTxHash(hash);
         setStep('monitoring');
         // Start monitoring for USDCx mint
-        bridgeStatus.startMonitoring(hash, stacksAddress, amount);
+        bridgeStatus.startMonitoring(hash, suiAddress, amount);
         toast.success("Bridge transaction submitted! Monitoring for completion...");
       }
     } catch (err) {
@@ -92,7 +92,7 @@ export function BridgeForm({
 
   const handleReset = () => {
     setAmount("");
-    setStacksAddress("");
+    setSUIAddress("");
     setStep('input');
     setTxHash(null);
     setError(null);
@@ -140,7 +140,7 @@ export function BridgeForm({
         case 'minting':
           return { 
             label: 'Minting USDCx', 
-            description: 'Stacks transaction detected, minting in progress...',
+            description: 'SUI transaction detected, minting in progress...',
             progress: 75,
             color: 'text-green-500'
           };
@@ -230,28 +230,28 @@ export function BridgeForm({
                 </a>
               </div>
 
-              {bridgeStatus.stacksTxHash && (
+              {bridgeStatus.suiTxHash && (
                 <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
-                  <p className="text-sm text-green-500 mb-2">🎉 Stacks Mint Transaction</p>
+                  <p className="text-sm text-green-500 mb-2">🎉 SUI Mint Transaction</p>
                   <a
-                    href={`https://explorer.hiro.so/txid/${bridgeStatus.stacksTxHash}?chain=testnet`}
+                    href={`https://explorer.hiro.so/txid/${bridgeStatus.suiTxHash}?chain=testnet`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-mono text-sm text-green-500 hover:underline flex items-center justify-center gap-2"
                   >
-                    {bridgeStatus.stacksTxHash.slice(0, 12)}...{bridgeStatus.stacksTxHash.slice(-6)}
+                    {bridgeStatus.suiTxHash.slice(0, 12)}...{bridgeStatus.suiTxHash.slice(-6)}
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 </div>
               )}
 
               <a
-                href={`https://explorer.hiro.so/address/${stacksAddress}?chain=testnet`}
+                href={`https://explorer.hiro.so/address/${suiAddress}?chain=testnet`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-primary hover:underline flex items-center justify-center gap-2"
               >
-                View Stacks Wallet
+                View SUI Wallet
                 <ExternalLink className="w-4 h-4" />
               </a>
             </div>
@@ -280,9 +280,9 @@ export function BridgeForm({
               Your {amount} USDC has been deposited to xReserve. 
             </p>
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6 text-left">
-              <p className="text-yellow-500 font-medium text-sm mb-2">⏳ Waiting for Stacks Attestation</p>
+              <p className="text-yellow-500 font-medium text-sm mb-2">⏳ Waiting for SUI Attestation</p>
               <p className="text-yellow-500/80 text-xs">
-                The Stacks attestation service will detect your deposit and mint USDCx to your address. 
+                The SUI attestation service will detect your deposit and mint USDCx to your address. 
                 This can take <strong>5-30 minutes</strong> on testnet.
               </p>
             </div>
@@ -299,14 +299,14 @@ export function BridgeForm({
               </a>
             </div>
             <div className="bg-secondary rounded-xl p-4 mb-6">
-              <p className="text-sm text-muted-foreground mb-2">Check Stacks Wallet</p>
+              <p className="text-sm text-muted-foreground mb-2">Check SUI Wallet</p>
               <a
-                href={`https://explorer.hiro.so/address/${stacksAddress}?chain=testnet`}
+                href={`https://explorer.hiro.so/address/${suiAddress}?chain=testnet`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-sm text-primary hover:underline flex items-center justify-center gap-2"
               >
-                View on Stacks Explorer
+                View on SUI Explorer
                 <ExternalLink className="w-4 h-4" />
               </a>
               <p className="text-xs text-muted-foreground mt-2">
@@ -334,7 +334,7 @@ export function BridgeForm({
       <CardHeader>
         <CardTitle className="text-xl text-foreground">Bridge USDC → USDCx</CardTitle>
         <CardDescription>
-          Transfer USDC from Ethereum Sepolia to Stacks Testnet
+          Transfer USDC from Ethereum Sepolia to SUI Testnet
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -379,21 +379,21 @@ export function BridgeForm({
 
         {/* To Section */}
         <div className="bg-secondary rounded-xl p-4 space-y-3">
-          <Label className="text-muted-foreground">To: Stacks Testnet</Label>
+          <Label className="text-muted-foreground">To: SUI Testnet</Label>
           <Input
             type="text"
-            placeholder="ST... (Stacks testnet address)"
-            value={stacksAddress}
-            onChange={(e) => setStacksAddress(e.target.value)}
+            placeholder="ST... (SUI testnet address)"
+            value={suiAddress}
+            onChange={(e) => setSUIAddress(e.target.value)}
             className="font-mono text-sm"
             disabled={step !== 'input'}
           />
-          {stacksAddress && !isValidAddress && (
-            <p className="text-destructive text-sm">Invalid Stacks address (must start with ST for testnet)</p>
+          {suiAddress && !isValidAddress && (
+            <p className="text-destructive text-sm">Invalid SUI address (must start with ST for testnet)</p>
           )}
           {isValidAddress && (
             <p className="text-green-500 text-sm flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4" /> Valid Stacks address
+              <CheckCircle2 className="w-4 h-4" /> Valid SUI address
             </p>
           )}
         </div>
@@ -454,7 +454,7 @@ export function BridgeForm({
               onClick={handleDeposit}
               className="w-full gradient-bitcoin text-primary-foreground font-semibold py-6 text-lg rounded-xl glow-orange hover:opacity-90 transition-opacity"
             >
-              Bridge to Stacks
+              Bridge to SUI
             </Button>
           )}
 
@@ -464,7 +464,7 @@ export function BridgeForm({
               className="w-full bg-secondary text-foreground font-semibold py-6 text-lg rounded-xl"
             >
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Bridging to Stacks...
+              Bridging to SUI...
             </Button>
           )}
         </div>

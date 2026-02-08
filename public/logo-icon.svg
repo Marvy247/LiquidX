@@ -1,0 +1,68 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4DA2FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Liquid flow background -->
+  <path d="M 10 24 Q 20 20, 32 24 T 54 24" 
+        stroke="url(#liquidGrad)" 
+        stroke-width="2" 
+        fill="none" 
+        opacity="0.5">
+    <animate attributeName="d" 
+             dur="3s" 
+             repeatCount="indefinite"
+             values="M 10 24 Q 20 20, 32 24 T 54 24;
+                     M 10 24 Q 20 28, 32 24 T 54 24;
+                     M 10 24 Q 20 20, 32 24 T 54 24"/>
+  </path>
+  
+  <path d="M 10 32 Q 20 28, 32 32 T 54 32" 
+        stroke="url(#liquidGrad)" 
+        stroke-width="2" 
+        fill="none" 
+        opacity="0.5">
+    <animate attributeName="d" 
+             dur="3s" 
+             repeatCount="indefinite"
+             begin="0.5s"
+             values="M 10 32 Q 20 28, 32 32 T 54 32;
+                     M 10 32 Q 20 36, 32 32 T 54 32;
+                     M 10 32 Q 20 28, 32 32 T 54 32"/>
+  </path>
+
+  <!-- "LX" Icon -->
+  <g>
+    <!-- L -->
+    <path d="M 16 14 L 16 38 L 28 38" 
+          stroke="url(#darkGrad)" 
+          stroke-width="5" 
+          fill="none" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- X -->
+    <path d="M 34 14 L 52 38 M 52 14 L 34 38" 
+          stroke="url(#darkGrad)" 
+          stroke-width="5" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Flow indicators -->
+    <circle cx="30" cy="26" r="2" fill="#4DA2FF"/>
+    <circle cx="54" cy="26" r="2" fill="#4DA2FF">
+      <animate attributeName="opacity" 
+               values="0.3;1;0.3" 
+               dur="2s" 
+               repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

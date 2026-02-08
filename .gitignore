@@ -116,7 +116,7 @@ playwright/.cache/
 *.swp
 *.swo
 
-# Clarinet & Stacks - SECURITY: Never commit private keys or mnemonics!
+# Clarinet & SUI - SECURITY: Never commit private keys or mnemonics!
 settings/Testnet.toml
 settings/Mainnet.toml
 settings/*.toml

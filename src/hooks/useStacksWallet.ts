@@ -15,8 +15,8 @@ const USDCX_CONTRACT = {
   assetName: 'usdcx-token',
 };
 
-export function useStacksWallet() {
-  const [stacksAddress, setStacksAddress] = useState<string | null>(null);
+export function useSUIWallet() {
+  const [stacksAddress, setSUIAddress] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [usdcxBalance, setUsdcxBalance] = useState<string>('0');
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +57,7 @@ export function useStacksWallet() {
           const address = testnetAddr?.address || stxAddresses[0]?.address;
           
           if (address) {
-            setStacksAddress(address);
+            setSUIAddress(address);
             setIsConnected(true);
             fetchUsdcxBalance(address);
           }
@@ -86,7 +86,7 @@ export function useStacksWallet() {
         const address = testnetAddr?.address || stxAddresses[0]?.address;
         
         if (address) {
-          setStacksAddress(address);
+          setSUIAddress(address);
           setIsConnected(true);
           fetchUsdcxBalance(address);
         }
@@ -100,7 +100,7 @@ export function useStacksWallet() {
 
   const disconnectWallet = useCallback(() => {
     disconnect();
-    setStacksAddress(null);
+    setSUIAddress(null);
     setIsConnected(false);
     setUsdcxBalance('0');
   }, []);

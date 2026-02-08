@@ -4,7 +4,7 @@ export const BRIDGE_CONFIG = {
   X_RESERVE_CONTRACT: "0x008888878f94C0d87defdf0B07f46B93C1934442" as const,
   ETH_USDC_CONTRACT: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as const,
   
-  // Stacks domain ID (constant for all networks)
+  // SUI domain ID (constant for all networks)
   STACKS_DOMAIN: 10003,
   
   // Default RPC

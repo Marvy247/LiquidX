@@ -126,8 +126,8 @@ export function OpportunityScanner({ amount, onSelectOpportunity }: OpportunityS
             {/* APY Breakdown */}
             <div className="grid grid-cols-3 gap-4 p-4 bg-background/50 rounded-xl border border-border/50">
               <div className="text-center">
-                <div className="text-sm text-muted-foreground mb-1">Stacks APY</div>
-                <div className="text-xl font-bold text-foreground">{formatAPY(hottest.stacksAPY)}</div>
+                <div className="text-sm text-muted-foreground mb-1">SUI APY</div>
+                <div className="text-xl font-bold text-foreground">{formatAPY(hottest.suiAPY)}</div>
               </div>
               <div className="text-center border-x border-border">
                 <div className="text-sm text-muted-foreground mb-1">Bridge Bonus</div>
@@ -198,8 +198,8 @@ export function OpportunityScanner({ amount, onSelectOpportunity }: OpportunityS
                     </div>
                     <div className="flex items-center gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Stacks: </span>
-                        <span className="font-medium text-foreground">{formatAPY(opp.stacksAPY)}</span>
+                        <span className="text-muted-foreground">SUI: </span>
+                        <span className="font-medium text-foreground">{formatAPY(opp.suiAPY)}</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Bonus: </span>

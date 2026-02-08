@@ -8,7 +8,7 @@ const projectId = 'cb44e6bd7a2139350e8c0fb2d0fea8cb';
 // Create the Wagmi adapter
 const metadata = {
   name: 'LiquidX',
-  description: 'Earn $LQX rewards while bridging USDC from Ethereum to Stacks',
+  description: 'Earn $LQX rewards while bridging USDC from Ethereum to SUI',
   url: typeof window !== 'undefined' ? window.location.origin : 'https://liquidx.vercel.app',
   icons: [
     typeof window !== 'undefined' 

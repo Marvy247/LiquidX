@@ -1,27 +1,27 @@
-#  LiquidX - Earn While Bridging to Stacks
+#  LiquidX - Earn While Bridging to SUI
 
 <p align="center">
-  <img src="https://img.shields.io/badge/USDCx-Hackathon-orange?style=for-the-badge" alt="USDCx Hackathon" />
-  <img src="https://img.shields.io/badge/Stacks-Blockchain-5546FF?style=for-the-badge" alt="Stacks" />
-  <img src="https://img.shields.io/badge/Circle-xReserve-00D632?style=for-the-badge" alt="Circle xReserve" />
+  <img src="https://img.shields.io/badge/SUI-Blockchain-4DA2FF?style=for-the-badge" alt="SUI" />
+  <img src="https://img.shields.io/badge/Wormhole-Bridge-00D632?style=for-the-badge" alt="Wormhole" />
+  <img src="https://img.shields.io/badge/Move-Smart_Contracts-FF5733?style=for-the-badge" alt="Move" />
 </p>
 
-<h3 align="center"> Built for the USDCx on Stacks Builder Challenge</h3>
+<h3 align="center">Built for SUI Ecosystem Growth</h3>
 
 <p align="center">
-  <strong>The First Platform That REWARDS You For Bringing Liquidity from Ethereum to Stacks</strong>
+  <strong>The First Platform That REWARDS You For Bringing Liquidity from Ethereum to SUI</strong>
 </p>
 
 ---
 
 ##  **The Challenge**
 
-The USDCx Hackathon asks: **"How do we bring liquidity from Ethereum to Stacks?"**
+**How do we bring liquidity from Ethereum to SUI?**
 
 **The problem with current bridges:**
 - ❌ No incentive to bridge
 - ❌ Users don't know what to do after bridging
-- ❌ No engagement with Stacks DeFi ecosystem  
+- ❌ No engagement with SUI DeFi ecosystem  
 - ❌ Boring user experience
 
 ##  **Our Solution: LiquidX**
@@ -29,27 +29,27 @@ The USDCx Hackathon asks: **"How do we bring liquidity from Ethereum to Stacks?"
 **LiquidX** is an **incentivized bridge aggregator** that transforms bridging into a rewarding experience:
 
 ✅ **Earn $LQX Tokens** - Get paid 0.75% of bridged amount + bonuses  
-✅ **Auto-Deploy to Best Yields** - One-click deployment to highest APY protocols on Stacks  
+✅ **Auto-Deploy to Best Yields** - One-click deployment to highest APY protocols on SUI  
 ✅ **Gamified Leaderboard** - Compete for top ranks with reward multipliers up to 3x  
 ✅ **Referral Rewards** - Earn 10% of your friends' rewards  
 ✅ **Real-Time Opportunities** - APY scanner finds the best yields across chains
 
 ---
 
-##  **Why LiquidX Wins**
+##  **Why LiquidX on SUI**
 
 ### **1. Bridge is the HERO**
-Everything revolves around bringing Ethereum → Stacks liquidity. Every feature incentivizes users to bridge more USDC.
+Everything revolves around bringing Ethereum → SUI liquidity. Every feature incentivizes users to bridge more USDC.
 
-### **2. Deep Circle xReserve Integration**  
-- Uses Circle's attestation service for secure bridging
-- Tracks bridge transactions on-chain
-- Verifies deposits via xReserve events
+### **2. Wormhole Bridge Integration**  
+- Uses Wormhole's battle-tested cross-chain messaging
+- Secure and reliable bridge infrastructure
+- Fast transaction finality
 
-### **3. Enhances Stacks DeFi**
-- Auto-routes capital to ALEX, Arkadiko, Stackswap, Velar
-- Increases TVL in Stacks protocols
-- Makes USDCx the go-to stablecoin
+### **3. Enhances SUI DeFi**
+- Auto-routes capital to Cetus, Turbos, Scallop
+- Increases TVL in SUI protocols
+- Makes USDC the preferred stablecoin on SUI
 
 ### **4. Real Product Potential**
 - Clear revenue model (0.5% auto-deploy fees)
@@ -57,9 +57,9 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 - Sticky engagement (vesting + multipliers)
 
 ### **5. Technical Innovation**
-- Custom Clarity smart contracts for rewards
+- Custom Move smart contracts for rewards and bridge registry
 - Real-time APY comparison engine
-- Automated yield optimization
+- Automated yield optimization on SUI
 
 ---
 
@@ -70,29 +70,28 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 │                        LIQUIDX                            │
 ├──────────────────────────────────────────────────────────┤
 │                                                           │
-│  Ethereum USDC ──► Circle xReserve ──► Stacks USDCx     │
+│  Ethereum USDC ──► Wormhole Bridge ──► SUI USDC         │
 │       │                    │                  │           │
 │       │                    │                  │           │
 │       ▼                    ▼                  ▼           │
-│  1. Approve           2. Attest          3. Mint          │
-│  2. Bridge            & Verify           & Register       │
+│  1. Approve           2. Lock &          3. Mint &        │
+│  2. Bridge            Relay VAA          Register         │
 │                                                           │
 │  ┌─────────────────────────────────────────────────────┐ │
-│  │         LiquidX Smart Contracts (Stacks)            │ │
-│  │  • Register bridge position                         │ │
+│  │         LiquidX Move Contracts (SUI)                │ │
+│  │  • Bridge Registry - Track positions                │ │
+│  │  • LQX Token - Rewards with vesting                │ │
 │  │  • Calculate $LQX rewards (0.75% + bonuses)        │ │
 │  │  • Apply multipliers (1x - 3x)                     │ │
 │  │  • Auto-deploy to DeFi protocols                   │ │
-│  │  • Update leaderboard rankings                     │ │
 │  └─────────────────────────────────────────────────────┘ │
 │                          │                                 │
 │                          ▼                                 │
 │          ┌──────────────────────────────┐                 │
-│          │   Stacks DeFi Protocols      │                 │
-│          │  • ALEX (14.8% APY)          │                 │
-│          │  • Arkadiko (9.2% APY)       │                 │
-│          │  • Stackswap (11.5% APY)     │                 │
-│          │  • Velar (8.7% APY)          │                 │
+│          │   SUI DeFi Protocols         │                 │
+│          │  • Cetus (18.0% APY)         │                 │
+│          │  • Turbos (22.5% APY)        │                 │
+│          │  • Scallop (14.5% APY)       │                 │
 │          └──────────────────────────────┘                 │
 │                                                           │
 └──────────────────────────────────────────────────────────┘
@@ -104,7 +103,7 @@ Everything revolves around bringing Ethereum → Stacks liquidity. Every feature
 
 ### **1.  Real-Time Opportunity Scanner**
 
-Monitors 10+ DeFi protocols across Ethereum and Stacks to find the best yield opportunities.
+Monitors 10+ DeFi protocols across Ethereum and SUI to find the best yield opportunities.
 
 **Features:**
 - Live APY tracking (auto-refreshes every 30s)
@@ -115,7 +114,7 @@ Monitors 10+ DeFi protocols across Ethereum and Stacks to find the best yield op
 **Example Alert:**
 ```
  HOTTEST DEAL: ALEX USDCx-STX Pool
-Stacks APY: 14.8%
+SUI APY: 14.8%
 Bridge Bonus: +3.0%
 TOTAL APY: 17.8%
 vs. Ethereum: 5.2% (Aave)
@@ -127,7 +126,7 @@ vs. Ethereum: 5.2% (Aave)
 
 ### **2. ⚡ Enhanced Bridge with Auto-Deploy**
 
-One-click bridging from Ethereum to Stacks DeFi.
+One-click bridging from Ethereum to SUI DeFi.
 
 **Options:**
 - **Auto-Deploy:** Bridge + Enter DeFi in one transaction (+30% bonus)
@@ -170,7 +169,7 @@ Native incentive token with real utility.
 - Governance voting on protocol decisions
 - Fee discounts (save 20% on auto-deploy fees)
 - Exclusive protocol access
-- Tradeable on Stacks DEXs
+- Tradeable on SUI DEXs
 
 ---
 
@@ -209,54 +208,66 @@ Track your earnings, vesting progress, and referrals.
 
 **Vesting:**
 - Rewards vest over 90 days
-- Keeps liquidity on Stacks long-term
+- Keeps liquidity on SUI long-term
 - Prevents dump and exit
 
 ---
 
 ## 🛠️ **Technical Implementation**
 
-### **Smart Contracts (Clarity)**
+### **Smart Contracts (Move)**
 
-**File:** `contracts/liquidity-rewards.clar`
+**Files:** 
+- `move/sources/bridge_registry.move`
+- `move/sources/lqx_token.move`
 
 **Key Functions:**
-```clarity
-;; Register a bridge transaction
-(define-public (register-bridge
-    (user principal)
-    (amount uint)
-    (eth-tx-hash (buff 32))
-    (auto-deploy bool)
-    (target-protocol (string-ascii 50))
-    (referrer (optional principal)))
-  ;; Calculates rewards, applies multipliers, updates leaderboard
+```move
+/// Register a bridge transaction
+public entry fun register_bridge(
+    registry: &mut BridgeRegistry,
+    amount: u64,
+    eth_tx_hash: vector<u8>,
+    auto_deploy: bool,
+    target_protocol: vector<u8>,
+    referrer: Option<address>,
+    clock: &Clock,
+    ctx: &mut TxContext
 )
 
-;; Claim vested rewards
-(define-public (claim-rewards)
-  ;; Transfers $LQX tokens to user
+/// Claim accumulated rewards
+public entry fun claim_rewards(
+    registry: &mut BridgeRegistry,
+    clock: &Clock,
+    ctx: &mut TxContext
 )
 
-;; Get user's position
-(define-read-only (get-user-position (user principal))
-  ;; Returns bridge stats, rewards, multiplier
-)
+/// Get user's position (read-only)
+public fun get_user_position(
+    registry: &BridgeRegistry,
+    user: address
+): (u64, u64, u64, u64, bool, vector<u8>)
 ```
 
 **Data Structures:**
-```clarity
-(define-map bridge-positions
-  { user: principal }
-  {
-    total-bridged: uint,
-    reward-multiplier: uint,
-    unclaimed-rewards: uint,
-    auto-deployed: bool,
-    target-protocol: (string-ascii 50),
-    referrer: (optional principal)
-  }
-)
+```move
+public struct BridgePosition has store {
+    user: address,
+    total_bridged: u64,
+    reward_multiplier: u64,
+    unclaimed_rewards: u64,
+    auto_deployed: bool,
+    target_protocol: String,
+    referrer: Option<address>
+}
+
+public struct BridgeRegistry has key {
+    id: UID,
+    positions: Table<address, BridgePosition>,
+    total_liquidity_bridged: u64,
+    total_rewards_distributed: u64,
+    total_users: u64
+}
 ```
 
 ---
@@ -267,7 +278,7 @@ Track your earnings, vesting progress, and referrals.
 
 **Capabilities:**
 - Fetches live APYs from Ethereum (Aave, Compound, Curve)
-- Fetches live APYs from Stacks (ALEX, Arkadiko, Stackswap, Velar)
+- Fetches live APYs from SUI (ALEX, Arkadiko, SUIwap, Velar)
 - Calculates yield spreads and opportunities
 - Ranks by total APY (DeFi rate + bridge bonus)
 - Auto-refreshes every 30 seconds
@@ -279,10 +290,9 @@ Track your earnings, vesting progress, and referrals.
 | Aave V3 | Ethereum | 5.2% | Low | Lending |
 | Compound V3 | Ethereum | 4.8% | Low | Lending |
 | Curve USDC | Ethereum | 3.5% | Very Low | Liquidity |
-| ALEX Pool | Stacks | 14.8% | Medium | Liquidity |
-| Arkadiko | Stacks | 9.2% | Low | Lending |
-| Stackswap | Stacks | 11.5% | Medium | Liquidity |
-| Velar | Stacks | 8.7% | Medium | Staking |
+| Cetus | SUI | 18.0% | Medium | Liquidity |
+| Turbos | SUI | 22.5% | High | Leverage |
+| Scallop | SUI | 14.5% | Low | Lending |
 
 ---
 
@@ -328,7 +338,7 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 └──────────────────────────────────────────────────────┘
 ```
 
-**This demonstrates LiquidX's direct contribution to bringing Ethereum liquidity into the Stacks ecosystem.**
+**This demonstrates LiquidX's direct contribution to bringing Ethereum liquidity into the SUI ecosystem.**
 
 ---
 
@@ -361,7 +371,7 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 - Node.js >= 18
 - pnpm >= 8
 - MetaMask (Ethereum wallet)
-- Leather (Stacks wallet)
+- SUI Wallet or Suiet (SUI wallet)
 
 ### **Installation:**
 
@@ -379,20 +389,34 @@ pnpm dev
 # App runs at http://localhost:5173
 ```
 
+### **Deploy Smart Contracts:**
+
+```bash
+# Install SUI CLI
+cargo install --locked --git https://github.com/MystenLabs/sui.git --branch testnet sui
+
+# Build and deploy contracts
+cd move
+sui move build
+sui client publish --gas-budget 100000000
+
+# Update .env with deployed package IDs
+```
+
 ### **Get Testnet Tokens:**
 
 | Token | Faucet |
 |-------|--------|
 | Sepolia ETH | https://cloud.google.com/application/web3/faucet/ethereum/sepolia |
+| Testnet SUI | https://discord.gg/sui (request in #testnet-faucet) |
 | Testnet USDC | https://faucet.circle.com/ |
-| Testnet STX | https://explorer.hiro.so/sandbox/faucet?chain=testnet |
 
 ### **Usage:**
 
-1. **Connect Wallets:** MetaMask (Ethereum) + Leather (Stacks)
+1. **Connect Wallets:** MetaMask (Ethereum) + SUI Wallet (SUI)
 2. **View Opportunities:** Browse real-time APY comparisons
 3. **Select Strategy:** Choose auto-deploy or manual
-4. **Bridge & Earn:** Approve → Bridge → Receive $LQX rewards
+4. **Bridge & Earn:** Approve → Bridge via Wormhole → Receive $LQX rewards
 5. **Track Progress:** Monitor dashboard and climb leaderboard
 
 ---
@@ -402,7 +426,7 @@ pnpm dev
 | Criteria | Weight | Self-Score | Justification |
 |----------|--------|------------|---------------|
 | **Technical Innovation** | 30% | 30/30 | Novel reward mechanics, custom Clarity contracts, APY scanner, auto-deploy automation |
-| **Integration Depth** | 25% | 25/25 | Deep Circle xReserve integration, attestation tracking, multi-protocol DeFi connections |
+| **Integration Depth** | 25% | 25/25 | Deep Wormhole integration, attestation tracking, multi-protocol DeFi connections |
 | **Usability** | 20% | 20/20 | Intuitive UI, gamification, clear incentives, mobile-responsive |
 | **Pitch Quality** | 15% | 15/15 | Compelling value prop, live demo, emotional storytelling |
 | **Product Potential** | 10% | 10/10 | Clear business model, network effects, scalable, defensible |
@@ -415,7 +439,7 @@ pnpm dev
 **Phase 1: Post-Hackathon (Month 1-2)**
 - Deploy mainnet contracts
 - Integrate 10+ DeFi protocols
-- Launch $LQX token on Stacks DEXs
+- Launch $LQX token on SUI DEXs
 - Mobile app (iOS + Android)
 
 **Phase 2: Growth (Month 3-6)**
@@ -439,24 +463,24 @@ MIT License - Open source and free to use.
 ---
 
 <p align="center">
-  <strong>Built for the Stacks & Ethereum communities</strong>
+  <strong>Built for the SUI & Ethereum communities</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Powered_by-Circle_xReserve-00D632?style=for-the-badge" alt="Circle xReserve" />
-  <img src="https://img.shields.io/badge/Built_on-Stacks-5546FF?style=for-the-badge" alt="Stacks" />
-  <img src="https://img.shields.io/badge/USDCx-Hackathon_2026-FFA500?style=for-the-badge" alt="Hackathon" />
+  <img src="https://img.shields.io/badge/Powered_by-Wormhole-00D632?style=for-the-badge" alt="Wormhole" />
+  <img src="https://img.shields.io/badge/Built_on-SUI-4DA2FF?style=for-the-badge" alt="SUI" />
+  <img src="https://img.shields.io/badge/Move-Language-FF5733?style=for-the-badge" alt="Move" />
 </p>
 
 ---
 
-##  **TL;DR: Why LiquidX Wins**
+##  **TL;DR: Why LiquidX on SUI**
 
-1. ✅ **Solves the actual challenge:** Brings liquidity from Ethereum to Stacks
-2. ✅ **Deep xReserve integration:** Uses Circle's attestation service  
-3. ✅ **Enhances Stacks DeFi:** Auto-routes capital to protocols
-4. ✅ **Technical innovation:** Smart contracts + APY engine + rewards
+1. ✅ **Solves the challenge:** Brings liquidity from Ethereum to SUI
+2. ✅ **Wormhole integration:** Uses battle-tested cross-chain bridge  
+3. ✅ **Enhances SUI DeFi:** Auto-routes capital to top protocols
+4. ✅ **Technical innovation:** Move smart contracts + APY engine + rewards
 5. ✅ **Product potential:** Real business model, scalable
 6. ✅ **10x better:** Not just a bridge, it's a complete ecosystem
 
-**LiquidX isn't just another bridge. It's the incentive layer that makes Stacks the destination for cross-chain liquidity.**
+**LiquidX isn't just another bridge. It's the incentive layer that makes SUI the destination for cross-chain liquidity.**

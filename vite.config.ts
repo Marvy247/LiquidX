@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-blockchain': ['@stacks/connect', '@stacks/transactions', '@stacks/network', '@reown/appkit', '@reown/appkit-adapter-wagmi', 'wagmi', 'viem'],
+          'vendor-blockchain': ['@reown/appkit', '@reown/appkit-adapter-wagmi', 'wagmi', 'viem'],
           'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
         },
       },

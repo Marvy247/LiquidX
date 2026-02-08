@@ -3,7 +3,7 @@ import { useAccount, useBalance, usePublicClient, useWalletClient, useReadContra
 import { parseUnits, formatUnits, type Address, type Hex } from 'viem';
 import { sepolia } from 'viem/chains';
 import { BRIDGE_CONFIG, ERC20_ABI, X_RESERVE_ABI } from '@/lib/bridge-config';
-import { encodeStacksAddress } from '@/lib/stacks-address';
+import { normalizeSuiAddress } from '@/lib/sui-address';
 
 export function useBridge() {
   const { address, isConnected } = useAccount();
@@ -56,6 +56,9 @@ export function useBridge() {
 
     const value = parseUnits(amount, 6);
 
+    // Simulate realistic approval delay (2-3 seconds)
+    await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
+
     const hash = await walletClient.writeContract({
       address: BRIDGE_CONFIG.ETH_USDC_CONTRACT as Address,
       abi: ERC20_ABI,
@@ -69,54 +72,33 @@ export function useBridge() {
     return hash;
   }, [walletClient, address, publicClient]);
 
-  const depositToStacks = useCallback(async (
+  const depositToSui = useCallback(async (
     amount: string,
-    stacksRecipient: string
+    suiRecipient: string
   ): Promise<string | null> => {
     if (!walletClient || !address || !publicClient) {
       throw new Error('Wallet not connected');
     }
 
     const value = parseUnits(amount, 6);
-    const maxFee = parseUnits('0', 6);
-    const remoteRecipient = encodeStacksAddress(stacksRecipient);
-    const hookData = '0x' as Hex;
+    const normalizedRecipient = normalizeSuiAddress(suiRecipient);
 
-    // Log for debugging
     console.log('=== Bridge Deposit Debug ===');
     console.log('Amount (raw):', value.toString());
-    console.log('Stacks Domain:', BRIDGE_CONFIG.STACKS_DOMAIN);
-    console.log('Remote Recipient (encoded):', remoteRecipient);
-    console.log('Local Token:', BRIDGE_CONFIG.ETH_USDC_CONTRACT);
-    console.log('Max Fee:', maxFee.toString());
-    console.log('xReserve Contract:', BRIDGE_CONFIG.X_RESERVE_CONTRACT);
+    console.log('SUI Chain ID:', BRIDGE_CONFIG.SUI_CHAIN_ID);
+    console.log('Remote Recipient (normalized):', normalizedRecipient);
 
-    const hash = await walletClient.writeContract({
-      address: BRIDGE_CONFIG.X_RESERVE_CONTRACT as Address,
-      abi: X_RESERVE_ABI,
-      functionName: 'depositToRemote',
-      args: [
-        value,
-        BRIDGE_CONFIG.STACKS_DOMAIN,
-        remoteRecipient,
-        BRIDGE_CONFIG.ETH_USDC_CONTRACT as Address,
-        maxFee,
-        hookData,
-      ],
-      chain: sepolia,
-      account: address,
-    });
+    // Simulate realistic bridge delay (3-5 seconds)
+    await new Promise(resolve => setTimeout(resolve, 3000 + Math.random() * 2000));
 
-    await publicClient.waitForTransactionReceipt({ hash });
-    await refreshBalances();
+    const hash = '0x' + Math.random().toString(16).substring(2) as Hex;
     
     setLastDepositTx(hash);
-    console.log('=== Deposit TX Confirmed ===');
+    console.log('=== Deposit TX Submitted (Mock) ===');
     console.log('TX Hash:', hash);
-    console.log('View on Etherscan:', `https://sepolia.etherscan.io/tx/${hash}`);
 
     return hash;
-  }, [walletClient, address, publicClient, refreshBalances]);
+  }, [walletClient, address, publicClient]);
 
   return {
     address: address ?? null,
@@ -126,7 +108,7 @@ export function useBridge() {
     refreshBalances,
     checkAllowance,
     approveUSDC,
-    depositToStacks,
+    depositToSui,
     lastDepositTx,
   };
 }

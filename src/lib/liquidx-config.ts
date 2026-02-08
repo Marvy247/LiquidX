@@ -2,12 +2,16 @@
 // Deployed Smart Contracts and Constants
 
 export const LIQUIDX_CONFIG = {
-  // LiquidX Rewards Contract (Deployed to Stacks Testnet)
-  REWARDS_CONTRACT: {
-    address: 'ST3Q4NCCEW1PGYRT6EV78HX8NZH07S1DXZG2SCP88',
-    name: 'liquidity-rewards',
-    fullAddress: 'ST3Q4NCCEW1PGYRT6EV78HX8NZH07S1DXZG2SCP88.liquidity-rewards',
-  },
+  // SUI Network Configuration
+  SUI_NETWORK: (import.meta.env.VITE_SUI_NETWORK || 'testnet') as 'testnet' | 'mainnet',
+  
+  // Move Package IDs (Set after deployment)
+  // NOTE: These are placeholder values. Deploy Move contracts and update .env file
+  BRIDGE_REGISTRY_PACKAGE: import.meta.env.VITE_BRIDGE_REGISTRY_PACKAGE || '',
+  LQX_TOKEN_PACKAGE: import.meta.env.VITE_LQX_TOKEN_PACKAGE || '',
+  
+  // Shared Object IDs
+  BRIDGE_REGISTRY_OBJECT: import.meta.env.VITE_BRIDGE_REGISTRY_OBJECT || '',
 
   // $LQX Token Details
   TOKEN: {
@@ -31,56 +35,54 @@ export const LIQUIDX_CONFIG = {
     tier4: { min: 50000, max: Infinity, multiplier: 3.0 },
   },
 
-  // Existing Bridge Configuration (from BRIDGE_CONFIG)
+  // Wormhole Bridge Configuration
   BRIDGE: {
-    X_RESERVE_CONTRACT: "0x008888878f94C0d87defdf0B07f46B93C1934442" as const,
+    WORMHOLE_CONTRACT: import.meta.env.VITE_WORMHOLE_CONTRACT || "0x0",
     ETH_USDC_CONTRACT: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as const,
-    STACKS_DOMAIN: 10003,
     ETH_RPC_URL: "https://ethereum-sepolia.publicnode.com",
     CHAIN_ID: 11155111, // Sepolia
+    SUI_CHAIN_ID: 21, // Wormhole SUI chain ID
   },
 
-  // USDCx Contract on Stacks (Testnet)
-  USDCX: {
-    address: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-    name: 'usdcx',
-    assetName: 'usdcx-token',
-    fullAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.usdcx',
+  // USDC on SUI
+  USDC_SUI: {
+    type: import.meta.env.VITE_USDC_TYPE || '0x5d4b302506645c37ff133b98c4b50a5ae14841659738d6d733d59d0d217a93bf::coin::COIN',
+    decimals: 6,
   },
 
-  // Approved DeFi Protocols on Stacks
+  // Approved DeFi Protocols on SUI (MVP: Top 3)
   PROTOCOLS: {
-    alex: {
-      name: 'ALEX USDCx-STX Pool',
-      contractAddress: 'SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9',
+    cetus: {
+      name: 'Cetus DEX',
+      packageId: '0x0', // Set after deployment
       category: 'liquidity',
-      riskScore: 5,
+      riskScore: 7,
+      description: 'Concentrated liquidity AMM on SUI',
+      estimatedAPY: 18.0,
     },
-    arkadiko: {
-      name: 'Arkadiko Lending',
-      contractAddress: 'SPSCWDV3RKV5ZRN1FQD84YE1NQFEDJ9R1F4DYQ11',
+    turbos: {
+      name: 'Turbos Finance',
+      packageId: '0x0', // Set after deployment
+      category: 'leverage',
+      riskScore: 8,
+      description: 'Leveraged yield farming',
+      estimatedAPY: 22.5,
+    },
+    scallop: {
+      name: 'Scallop',
+      packageId: '0x0', // Set after deployment
       category: 'lending',
-      riskScore: 4,
-    },
-    stackswap: {
-      name: 'Stackswap USDCx Pool',
-      contractAddress: 'SP1Z92MPDQEWZXW36VX71Q25HKF5K2EPCJ304F275',
-      category: 'liquidity',
       riskScore: 6,
-    },
-    velar: {
-      name: 'Velar Finance',
-      contractAddress: 'SP1Y5YSTAHZ88XYK1VPDH24GY0HPX5J4JECTMY4A1',
-      category: 'staking',
-      riskScore: 5,
+      description: 'Lending and borrowing platform',
+      estimatedAPY: 14.5,
     },
   },
 
-  // Network Configuration
+  // Network URLs
   NETWORK: {
-    name: 'testnet',
-    stacksApi: 'https://api.testnet.hiro.so',
-    explorerUrl: 'https://explorer.hiro.so',
+    name: 'testnet' as 'testnet' | 'mainnet',
+    rpcUrl: 'https://fullnode.testnet.sui.io:443',
+    explorerUrl: 'https://testnet.suivision.xyz',
   },
 
   // Vesting Period (in days)
@@ -128,6 +130,6 @@ export function calculateRewards(
 
 // Contract URLs
 export const CONTRACT_URLS = {
-  explorer: `${LIQUIDX_CONFIG.NETWORK.explorerUrl}/txid/${LIQUIDX_CONFIG.REWARDS_CONTRACT.fullAddress}?chain=testnet`,
-  api: `${LIQUIDX_CONFIG.NETWORK.stacksApi}/v2/contracts/interface/${LIQUIDX_CONFIG.REWARDS_CONTRACT.fullAddress}`,
+  explorer: `${LIQUIDX_CONFIG.NETWORK.explorerUrl}/package/${LIQUIDX_CONFIG.BRIDGE_REGISTRY_PACKAGE}`,
+  bridgeRegistry: `${LIQUIDX_CONFIG.NETWORK.explorerUrl}/object/${LIQUIDX_CONFIG.BRIDGE_REGISTRY_OBJECT}`,
 };

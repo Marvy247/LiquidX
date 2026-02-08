@@ -1,25 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Background Circle -->
-  <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-  <circle cx="50" cy="50" r="45" fill="url(#gradient1)" stroke="#3b82f6" stroke-width="2"/>
-  
-  <!-- Bridge/Arrow Symbol representing bridging -->
-  <path d="M25 55 L50 30 L75 55" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M25 70 L50 45 L75 70" stroke="#60a5fa" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  
-  <!-- Wings (Hermes symbol) -->
-  <path d="M20 40 Q10 35 15 25 Q25 30 30 35" fill="#f97316" opacity="0.9"/>
-  <path d="M80 40 Q90 35 85 25 Q75 30 70 35" fill="#f97316" opacity="0.9"/>
-  
-  <!-- Central dot (representing USDC) -->
-  <circle cx="50" cy="60" r="8" fill="#2775ca"/>
-  <text x="50" y="64" text-anchor="middle" fill="white" font-size="10" font-weight="bold">$</text>
-  
-  <!-- Gradient definitions -->
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle with Gradient -->
   <defs>
-    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="100%" style="stop-color:#1e293b"/>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4DA2FF;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.05" />
     </linearGradient>
+    
+    <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4DA2FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="xGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
+
+  <!-- Background -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="#e5e7eb" stroke-width="1"/>
+  
+  <!-- Liquid Wave Layers (representing cross-chain flow) -->
+  <g opacity="0.6">
+    <!-- Wave 1 -->
+    <path d="M 40 80 Q 60 70, 80 80 T 120 80 T 160 80" 
+          stroke="url(#liquidGradient)" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round">
+      <animate attributeName="d" 
+               dur="3s" 
+               repeatCount="indefinite"
+               values="M 40 80 Q 60 70, 80 80 T 120 80 T 160 80;
+                       M 40 80 Q 60 90, 80 80 T 120 80 T 160 80;
+                       M 40 80 Q 60 70, 80 80 T 120 80 T 160 80"/>
+    </path>
+    
+    <!-- Wave 2 -->
+    <path d="M 40 95 Q 60 85, 80 95 T 120 95 T 160 95" 
+          stroke="url(#liquidGradient)" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round">
+      <animate attributeName="d" 
+               dur="3s" 
+               repeatCount="indefinite"
+               begin="0.5s"
+               values="M 40 95 Q 60 85, 80 95 T 120 95 T 160 95;
+                       M 40 95 Q 60 105, 80 95 T 120 95 T 160 95;
+                       M 40 95 Q 60 85, 80 95 T 120 95 T 160 95"/>
+    </path>
+    
+    <!-- Wave 3 -->
+    <path d="M 40 110 Q 60 100, 80 110 T 120 110 T 160 110" 
+          stroke="url(#liquidGradient)" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round">
+      <animate attributeName="d" 
+               dur="3s" 
+               repeatCount="indefinite"
+               begin="1s"
+               values="M 40 110 Q 60 100, 80 110 T 120 110 T 160 110;
+                       M 40 110 Q 60 120, 80 110 T 120 110 T 160 110;
+                       M 40 110 Q 60 100, 80 110 T 120 110 T 160 110"/>
+    </path>
+  </g>
+
+  <!-- Stylized "LX" Mark -->
+  <g filter="url(#glow)">
+    <!-- "L" -->
+    <path d="M 60 50 L 60 90 L 85 90" 
+          stroke="url(#xGradient)" 
+          stroke-width="8" 
+          fill="none" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- "X" with flowing design -->
+    <path d="M 95 50 L 135 90 M 135 50 L 95 90" 
+          stroke="url(#xGradient)" 
+          stroke-width="8" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Connection dots (representing cross-chain) -->
+    <circle cx="90" cy="70" r="4" fill="#4DA2FF"/>
+    <circle cx="140" cy="70" r="4" fill="#4DA2FF">
+      <animate attributeName="opacity" 
+               values="0.3;1;0.3" 
+               dur="2s" 
+               repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Bottom text curve -->
+  <path id="textCurve" d="M 50 150 Q 100 155, 150 150" fill="none"/>
+  <text font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#1f2937">
+    <textPath href="#textCurve" startOffset="50%" text-anchor="middle">
+      LiquidX
+    </textPath>
+  </text>
+  
+  <!-- Tagline -->
+  <text x="100" y="175" 
+        font-family="Arial, sans-serif" 
+        font-size="10" 
+        fill="#6b7280" 
+        text-anchor="middle">
+    Bridge. Earn. Grow.
+  </text>
 </svg>
