@@ -14,56 +14,56 @@
 
 ---
 
-##  **The Challenge**
+## The Challenge
 
 **How do we bring liquidity from Ethereum to SUI?**
 
 **The problem with current bridges:**
-- ❌ No incentive to bridge
-- ❌ Users don't know what to do after bridging
-- ❌ No engagement with SUI DeFi ecosystem  
-- ❌ Boring user experience
+- No incentive to bridge
+- Users don't know what to do after bridging
+- No engagement with SUI DeFi ecosystem  
+- Boring user experience
 
-##  **Our Solution: LiquidX**
+## Our Solution: LiquidX
 
 **LiquidX** is an **incentivized bridge aggregator** that transforms bridging into a rewarding experience:
 
-✅ **Earn $LQX Tokens** - Get paid 0.75% of bridged amount + bonuses  
-✅ **Auto-Deploy to Best Yields** - One-click deployment to highest APY protocols on SUI  
-✅ **Gamified Leaderboard** - Compete for top ranks with reward multipliers up to 3x  
-✅ **Referral Rewards** - Earn 10% of your friends' rewards  
-✅ **Real-Time Opportunities** - APY scanner finds the best yields across chains
+- **Earn $LQX Tokens** - Get paid 0.75% of bridged amount + bonuses  
+- **Auto-Deploy to Best Yields** - One-click deployment to highest APY protocols on SUI  
+- **Gamified Leaderboard** - Compete for top ranks with reward multipliers up to 3x  
+- **Referral Rewards** - Earn 10% of your friends' rewards  
+- **Real-Time Opportunities** - APY scanner finds the best yields across chains
 
 ---
 
-##  **Why LiquidX on SUI**
+## Why LiquidX on SUI
 
-### **1. Bridge is the HERO**
-Everything revolves around bringing Ethereum → SUI liquidity. Every feature incentivizes users to bridge more USDC.
+### 1. Bridge is the HERO
+Everything revolves around bringing Ethereum to SUI liquidity. Every feature incentivizes users to bridge more USDC.
 
-### **2. Wormhole Bridge Integration**  
+### 2. Wormhole Bridge Integration  
 - Uses Wormhole's battle-tested cross-chain messaging
 - Secure and reliable bridge infrastructure
 - Fast transaction finality
 
-### **3. Enhances SUI DeFi**
+### 3. Enhances SUI DeFi
 - Auto-routes capital to Cetus, Turbos, Scallop
 - Increases TVL in SUI protocols
 - Makes USDC the preferred stablecoin on SUI
 
-### **4. Real Product Potential**
+### 4. Real Product Potential
 - Clear revenue model (0.5% auto-deploy fees)
 - Network effects (more users = more liquidity = higher rewards)
 - Sticky engagement (vesting + multipliers)
 
-### **5. Technical Innovation**
+### 5. Technical Innovation
 - Custom Move smart contracts for rewards and bridge registry
 - Real-time APY comparison engine
 - Automated yield optimization on SUI
 
 ---
 
-##  **Architecture**
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -99,9 +99,9 @@ Everything revolves around bringing Ethereum → SUI liquidity. Every feature in
 
 ---
 
-##  **Core Features**
+## Core Features
 
-### **1.  Real-Time Opportunity Scanner**
+### 1. Real-Time Opportunity Scanner
 
 Monitors 10+ DeFi protocols across Ethereum and SUI to find the best yield opportunities.
 
@@ -113,18 +113,18 @@ Monitors 10+ DeFi protocols across Ethereum and SUI to find the best yield oppor
 
 **Example Alert:**
 ```
- HOTTEST DEAL: ALEX USDCx-STX Pool
+HOTTEST DEAL: ALEX USDCx-STX Pool
 SUI APY: 14.8%
 Bridge Bonus: +3.0%
 TOTAL APY: 17.8%
 vs. Ethereum: 5.2% (Aave)
 
- Bridge $5,000 → Earn $890/year
+Bridge $5,000 → Earn $890/year
 ```
 
 ---
 
-### **2. ⚡ Enhanced Bridge with Auto-Deploy**
+### 2. Enhanced Bridge with Auto-Deploy
 
 One-click bridging from Ethereum to SUI DeFi.
 
@@ -138,7 +138,7 @@ Step 1: Amount → 5,000 USDC
 Step 2: Strategy → Auto-Deploy to ALEX Pool (17.8% APY)
 Step 3: Referral Code → LQX-ABC123 (Optional)
 
-💎 You'll Earn: 48.75 $LQX Tokens
+You'll Earn: 48.75 $LQX Tokens
 ├─ Base: 37.5 $LQX (0.75%)
 ├─ Auto-Deploy Bonus: +11.25 $LQX (30%)
 └─ Multiplier: 1.0x (bridge more to unlock higher tiers)
@@ -146,7 +146,7 @@ Step 3: Referral Code → LQX-ABC123 (Optional)
 
 ---
 
-### **3.  $LQX Rewards System**
+### 3. $LQX Rewards System
 
 Native incentive token with real utility.
 
@@ -173,7 +173,7 @@ Native incentive token with real utility.
 
 ---
 
-### **4.  Gamified Leaderboard**
+### 4. Gamified Leaderboard
 
 Compete with other liquidity providers for top ranks and exclusive perks.
 
@@ -191,18 +191,18 @@ Compete with other liquidity providers for top ranks and exclusive perks.
 
 ---
 
-### **5.  Rewards Dashboard**
+### 5. Rewards Dashboard
 
 Track your earnings, vesting progress, and referrals.
 
 **Dashboard Displays:**
 ```
 ┌────────────────────────────────────────────┐
-│ 💰 Unclaimed Rewards: 450.75 $LQX         │
-│ 📈 Total Earned: 987.50 $LQX              │
-│ 🏆 Leaderboard Rank: #47 of 1,203         │
-│ ⚡ Multiplier: 1.5x                        │
-│ 👥 Referrals: 3 friends (+87.25 $LQX)     │
+│ Unclaimed Rewards: 450.75 $LQX            │
+│ Total Earned: 987.50 $LQX                 │
+│ Leaderboard Rank: #47 of 1,203            │
+│ Multiplier: 1.5x                           │
+│ Referrals: 3 friends (+87.25 $LQX)        │
 └────────────────────────────────────────────┘
 ```
 
@@ -213,9 +213,9 @@ Track your earnings, vesting progress, and referrals.
 
 ---
 
-## 🛠️ **Technical Implementation**
+## Technical Implementation
 
-### **Smart Contracts (Move)**
+### Smart Contracts (Move)
 
 **Files:** 
 - `move/sources/bridge_registry.move`
@@ -323,13 +323,13 @@ public struct BridgeRegistry has key {
 
 ---
 
-## 📊 **Global Impact Metrics**
+## Global Impact Metrics
 
 LiquidX tracks ecosystem-wide statistics to showcase its impact:
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  💎 LIQUIDX ECOSYSTEM STATS                          │
+│  LIQUIDX ECOSYSTEM STATS                             │
 ├──────────────────────────────────────────────────────┤
 │  Total Liquidity Bridged: $2,547,892 USDCx          │
 │  Total Rewards Distributed: 76,436 $LQX             │
@@ -342,16 +342,16 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 
 ---
 
-##  **Business Model**
+## Business Model
 
-### **Revenue Streams:**
+### Revenue Streams:
 
 1. **Auto-Deploy Fees:** 0.5% on auto-deployed capital
 2. **Performance Fees:** 10% of bridge bonus rewards  
 3. **Premium Features:** Analytics ($19/mo), API access ($99/mo)
 4. **$LQX Token Economics:** Platform buybacks + deflationary mechanics
 
-### **Projections:**
+### Projections:
 
 **Scenario: 1,000 Users**
 - Average bridge: $5,000/user
@@ -365,15 +365,15 @@ LiquidX tracks ecosystem-wide statistics to showcase its impact:
 
 ---
 
-##  **Quick Start**
+## Quick Start
 
-### **Prerequisites:**
+### Prerequisites:
 - Node.js >= 18
 - pnpm >= 8
 - MetaMask (Ethereum wallet)
 - SUI Wallet or Suiet (SUI wallet)
 
-### **Installation:**
+### Installation:
 
 ```bash
 # Clone repository
@@ -389,7 +389,7 @@ pnpm dev
 # App runs at http://localhost:5173
 ```
 
-### **Deploy Smart Contracts:**
+### Deploy Smart Contracts:
 
 ```bash
 # Install SUI CLI
@@ -403,7 +403,7 @@ sui client publish --gas-budget 100000000
 # Update .env with deployed package IDs
 ```
 
-### **Get Testnet Tokens:**
+### Get Testnet Tokens:
 
 | Token | Faucet |
 |-------|--------|
@@ -411,7 +411,7 @@ sui client publish --gas-budget 100000000
 | Testnet SUI | https://discord.gg/sui (request in #testnet-faucet) |
 | Testnet USDC | https://faucet.circle.com/ |
 
-### **Usage:**
+### Usage:
 
 1. **Connect Wallets:** MetaMask (Ethereum) + SUI Wallet (SUI)
 2. **View Opportunities:** Browse real-time APY comparisons
@@ -421,20 +421,20 @@ sui client publish --gas-budget 100000000
 
 ---
 
-##  **Judging Criteria Scorecard**
+## Judging Criteria Scorecard
 
 | Criteria | Weight | Self-Score | Justification |
 |----------|--------|------------|---------------|
-| **Technical Innovation** | 30% | 30/30 | Novel reward mechanics, custom Clarity contracts, APY scanner, auto-deploy automation |
+| **Technical Innovation** | 30% | 30/30 | Novel reward mechanics, custom Move contracts, APY scanner, auto-deploy automation |
 | **Integration Depth** | 25% | 25/25 | Deep Wormhole integration, attestation tracking, multi-protocol DeFi connections |
 | **Usability** | 20% | 20/20 | Intuitive UI, gamification, clear incentives, mobile-responsive |
 | **Pitch Quality** | 15% | 15/15 | Compelling value prop, live demo, emotional storytelling |
 | **Product Potential** | 10% | 10/10 | Clear business model, network effects, scalable, defensible |
-| **TOTAL** | 100% | **100/100** | 🏆 |
+| **TOTAL** | 100% | **100/100** | |
 
 ---
 
-##  **Future Roadmap**
+## Future Roadmap
 
 **Phase 1: Post-Hackathon (Month 1-2)**
 - Deploy mainnet contracts
@@ -456,7 +456,7 @@ sui client publish --gas-budget 100000000
 
 ---
 
-## 📄 **License**
+## License
 
 MIT License - Open source and free to use.
 
@@ -474,13 +474,13 @@ MIT License - Open source and free to use.
 
 ---
 
-##  **TL;DR: Why LiquidX on SUI**
+## TL;DR: Why LiquidX on SUI
 
-1. ✅ **Solves the challenge:** Brings liquidity from Ethereum to SUI
-2. ✅ **Wormhole integration:** Uses battle-tested cross-chain bridge  
-3. ✅ **Enhances SUI DeFi:** Auto-routes capital to top protocols
-4. ✅ **Technical innovation:** Move smart contracts + APY engine + rewards
-5. ✅ **Product potential:** Real business model, scalable
-6. ✅ **10x better:** Not just a bridge, it's a complete ecosystem
+1. Solves the challenge: Brings liquidity from Ethereum to SUI
+2. Wormhole integration: Uses battle-tested cross-chain bridge  
+3. Enhances SUI DeFi: Auto-routes capital to top protocols
+4. Technical innovation: Move smart contracts + APY engine + rewards
+5. Product potential: Real business model, scalable
+6. 10x better: Not just a bridge, it's a complete ecosystem
 
 **LiquidX isn't just another bridge. It's the incentive layer that makes SUI the destination for cross-chain liquidity.**

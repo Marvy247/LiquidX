@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider } from 'wagmi'
 import { wagmiAdapter } from '@/lib/reown-config'
 import { SuiClientProvider, WalletProvider as SuiWalletProvider } from '@mysten/dapp-kit'
-import { getFullnodeUrl } from '@mysten/sui.js/client'
+import { getFullnodeUrl } from '@mysten/sui/client'
 import { LIQUIDX_CONFIG } from '@/lib/liquidx-config'
 
 const queryClient = new QueryClient({
