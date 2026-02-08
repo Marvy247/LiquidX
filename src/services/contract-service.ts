@@ -1,8 +1,8 @@
 // LiquidX Contract Service
 // Handles all interactions with the SUI Move smart contracts
 
-import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
 import { LIQUIDX_CONFIG } from '@/lib/liquidx-config';
 
 // Initialize SUI client
@@ -51,7 +51,7 @@ export async function getUserPosition(userAddress: string): Promise<UserPosition
     }
 
     // Call the get_user_position function on the bridge registry
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
     tx.moveCall({
       target: `${BRIDGE_REGISTRY_PACKAGE}::bridge_registry::get_user_position`,
       arguments: [
@@ -60,7 +60,7 @@ export async function getUserPosition(userAddress: string): Promise<UserPosition
       ],
     });
 
-    const result = await suiClient.devInspectTransactionBlock({
+    const result = await suiClient.devInspectTransaction({
       transactionBlock: tx,
       sender: userAddress,
     });
@@ -112,7 +112,7 @@ export async function getGlobalStats(): Promise<GlobalStats> {
       };
     }
 
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
     tx.moveCall({
       target: `${BRIDGE_REGISTRY_PACKAGE}::bridge_registry::get_global_stats`,
       arguments: [tx.object(BRIDGE_REGISTRY_OBJECT)],
@@ -120,7 +120,7 @@ export async function getGlobalStats(): Promise<GlobalStats> {
 
     // Use a dummy address for dev inspect
     const dummyAddress = '0x0000000000000000000000000000000000000000000000000000000000000000';
-    const result = await suiClient.devInspectTransactionBlock({
+    const result = await suiClient.devInspectTransaction({
       transactionBlock: tx,
       sender: dummyAddress,
     });
@@ -163,8 +163,8 @@ export function prepareRegisterBridgeTransaction(
   autoDeploy: boolean,
   targetProtocol: string,
   referrerAddress?: string
-): TransactionBlock {
-  const tx = new TransactionBlock();
+): Transaction {
+  const tx = new Transaction();
   
   // Convert amount to microunits (6 decimals)
   const amountMicro = Math.floor(amount * 1_000_000);
@@ -192,8 +192,8 @@ export function prepareRegisterBridgeTransaction(
 }
 
 // Prepare claim-rewards transaction for SUI
-export function prepareClaimRewardsTransaction(): TransactionBlock {
-  const tx = new TransactionBlock();
+export function prepareClaimRewardsTransaction(): Transaction {
+  const tx = new Transaction();
   
   tx.moveCall({
     target: `${BRIDGE_REGISTRY_PACKAGE}::bridge_registry::claim_rewards`,
@@ -214,7 +214,7 @@ export async function waitForTransactionConfirmation(
 ): Promise<boolean> {
   for (let i = 0; i < maxAttempts; i++) {
     try {
-      const txResponse = await suiClient.getTransactionBlock({
+      const txResponse = await suiClient.getTransaction({
         digest,
         options: { showEffects: true },
       });
